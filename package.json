@@ -1,0 +1,14 @@
+{
+    "name": "discord_bot",
+    "version": "1.0.0",
+    "description": "Discord.js on Docker",
+    "author": "kjell5317",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "discord.js": "^12.5.3",
+      "mqtt": "^4.2.6"
+    }
+}
