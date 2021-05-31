@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 {
     "name": "discord-bot",
     "url": "https://github.com/kjell5317/discord-bot",
     "maintainer": "Kjell5317 <kjell5317@gmail.com>"
+=======
+{
+    "name": "discord-bot",
+    "url": "https://github.com/kjell5317/discord-bot",
+    "maintainer": "Kjell5317 <kjell5317@gmail.com>"
+>>>>>>> 8d41305b713a727189eecfaa3ea5020a921d316f
 }
