@@ -14,6 +14,6 @@ VOICE=$(bashio::config 'voice_connected')
 GUILD_ID=$(bashio::config 'guild_id')
 YOUR_ID=$(bashio::config 'your_id')
 
-node ./server.js $BOT_TOKEN $URL $PORT $USERNAME $PASSWORD $ONLINE_FRIENDS $COMMANDS $VOICE $GUILD_ID $YOUR_ID
-
 bashio::log.info "Starting..."
+
+node ./server.js $BOT_TOKEN $URL $PORT $USERNAME $PASSWORD $ONLINE_FRIENDS $COMMANDS $VOICE $GUILD_ID $YOUR_ID

@@ -16,11 +16,11 @@ const m_client = mqtt.connect(args[1], options);
 
 //READY
 d_client.on('ready', () => {
-  console.log(`BOT logged in as ${d_client.user.username}!`);
+  console.info(`BOT logged in as ${d_client.user.username}!`);
 });
 
 m_client.on('connect', () => {
-    console.log('MQTT connected');
+    console.info('MQTT connected');
     m_client.subscribe(args[6]);
 });
 
@@ -47,6 +47,8 @@ m_client.on('message', (topic, message) => {
       case 'unmute':
         you.voice.setMute(false);
         break;
+      default:
+        console.warn(`The Command '${message.toString()}' is not supported`)
     }
   }
 });
