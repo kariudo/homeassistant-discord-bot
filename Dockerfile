@@ -10,8 +10,8 @@ RUN apk add --no-cache \
     git
 
 COPY package.json /
-COPY server.js /
 RUN cd / && npm install
+COPY server.js /
 
 COPY run.sh /
 RUN chmod a+x /run.sh
