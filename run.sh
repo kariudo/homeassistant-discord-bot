@@ -3,7 +3,7 @@ set +u
 
 CONFIG_PATH=/data/options.json
 
-BOT_TOKEN=$(baashio::config 'bot_token')
+BOT_TOKEN=$(bashio::config 'bot_token')
 URL=$(bashio::config 'mqtt_url')
 PORT=$(bashio::config 'mqtt_port')
 USERNAME=$(bashio::config 'mqtt_username')
