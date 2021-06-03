@@ -26,7 +26,7 @@ m_client.on('connect', () => {
 
 //Commands
 m_client.on('message', (topic, message) => {
-  if (topic == args[6]){  
+  if (topic == args[6]){
     const Server = d_client.guilds.cache.get(args[8])
     const you = Server.members.cache.get(args[9])
     switch(message.toString()){
@@ -48,7 +48,7 @@ m_client.on('message', (topic, message) => {
         you.voice.setMute(false);
         break;
       default:
-        console.warn(`The Command '${message.toString()}' is not supported`)
+        console.log(`The Command '${message.toString()}' is not supported`)
     }
   }
 });
@@ -60,7 +60,7 @@ d_client.on('voiceStateUpdate', (oldState, newState) => {
       m_client.publish(args[7], '{"voice_connection":"false", "mute": "unavailable", "deaf": "unavailable"}');
     }
   }
-  else if (oldState.channelID === null){   
+  else if (oldState.channelID === null){
     if (newState.member.id === args[9]){
       deaf = newState.member.voice.deaf;
       mute = newState.member.voice.mute;
