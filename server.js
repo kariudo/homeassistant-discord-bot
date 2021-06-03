@@ -1,27 +1,38 @@
 //SETUP
+const args = process.argv.slice(2)
+//Discord
 const Discord = require('discord.js');
 const d_client = new Discord.Client();
-
-const args = process.argv.slice(2)
-
+//Mqtt
 const mqtt = require('mqtt');
 const options = {
-    port: args[2],
-    host: args[1],
-    clientId: 'Node.js_' + Math.random().toString(16).substr(2, 8),
-    username: args[3],
-    password: args[4]
+  port: args[2],
+  host: args[1],
+  clientId: 'Node.js_' + Math.random().toString(16).substr(2, 8),
+  username: args[3],
+  password: args[4],
+  clean: true,
+  resubscribe: false
 };
 const m_client = mqtt.connect(args[1], options);
 
 //READY
+//Discord
 d_client.on('ready', () => {
   console.info(`BOT logged in as ${d_client.user.username}!`);
 });
-
+//Mqtt
 m_client.on('connect', () => {
     console.info('MQTT connected');
     m_client.subscribe(args[6]);
+});
+
+//ERROR
+m_client.on('error', (error) => {
+  console.error(`MQTT error: ${error}`)
+});
+m_client.on('close', () => {
+  console.warning('MQTT disconnected')
 });
 
 //Commands
@@ -48,7 +59,7 @@ m_client.on('message', (topic, message) => {
         you.voice.setMute(false);
         break;
       default:
-        console.log(`The Command '${message.toString()}' is not supported`)
+        console.error(`The Command '${message.toString()}' is not supported`)
     }
   }
 });

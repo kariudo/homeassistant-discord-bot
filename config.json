@@ -1,6 +1,6 @@
 {
     "name": "Discord Bot",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "slug": "discord_bot",
     "description": "Discord bot running on a dockerized NodeJS server",
     "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
