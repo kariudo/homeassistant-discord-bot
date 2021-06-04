@@ -12,9 +12,9 @@
 1. Make sure you have [Mosquitto broker](https://github.com/home-assistant/addons/tree/master/mosquitto) installed and up and running!
 2. Enter your `<url>` and `<login>` information!
 3. Choose a unique `<topic>` which will be used by your bot to publish and subscribe!
-    1. `<command>` is the topic you're **sending** *string* commands to which could be *mute, unmute, deaf, undeaf and kick*!
-    2. `<online_friends>` is the topic where you're **getting** information about your *online server mebers and their activities* as a json!
-    3. `<voice_conneced>` **returns** a boolean if you're *connected to a voice channel* and if you're muted or deafed!
+   1. `<command>` is the topic you're **sending** _string_ commands to which could be _mute, unmute, deaf, undeaf and kick_!
+   2. `<online>` is the topic where you're **getting** information about your _online server mebers and their activities_ as a json!
+   3. `<voice>` **returns** a boolean if you're _connected to a voice channel_ and if you're muted or deafed!
 
 ### IDs
 
@@ -24,10 +24,10 @@
 ## How to use
 
 1. Subscribe to your choosen `<topics>` via [HomeAssistant](https://www.home-assistant.io/integrations/sensor.mqtt/) or NodeRED
-2. Publish your *commands* to your choosen `<topic>`
+2. Publish your _commands_ to your choosen `<topic>`
 
 You can use [this Flow](https://gist.github.com/kjell5317/530394d028383119e9523e777d2ac1ce) to filter your friends and use all available commands.
 
 ## Customization
 
-The Node.js server uses [Discord.js](https://discord.js.org/#/), so you can highly customize the *server.js* file to da everything you like.
+The Node.js server uses [Discord.js](https://discord.js.org/#/), so you can highly customize the _server.js_ file to da everything you like.

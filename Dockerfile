@@ -3,6 +3,7 @@ FROM $BUILD_FROM
 
 ENV LANG C.UTF-8
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+WORKDIR /data
 
 RUN apk add --no-cache \
     nodejs \
