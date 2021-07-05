@@ -14,6 +14,11 @@ const your_id = args[9]
 //Discord
 const Discord = require('discord.js');
 const d_client = new Discord.Client();
+
+d_client.on('ready', () => {
+  console.info(`BOT logged in as ${d_client.user.username}!`);
+});
+
 //Mqtt
 const mqtt = require('mqtt');
 const options = {
@@ -27,12 +32,6 @@ const options = {
 };
 const m_client = mqtt.connect(mqtt_url, options);
 
-//READY
-//Discord
-d_client.on('ready', () => {
-  console.info(`BOT logged in as ${d_client.user.username}!`);
-});
-//Mqtt
 m_client.on('connect', () => {
     console.info('MQTT connected');
     m_client.subscribe(topic_command);

@@ -1,2 +1,2 @@
 *.log
-*secrets.yaml
+*secrets.*
