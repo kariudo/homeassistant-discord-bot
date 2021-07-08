@@ -9,7 +9,7 @@
 
 ### MQTT
 
-1. Make sure you have [Mosquitto broker](https://github.com/home-assistant/addons/tree/master/mosquitto) installed and up and running!
+1. Make sure you have [Mosquitto broker](https://github.com/home-assistant/addons/tree/master/mosquitto) up and running!
 2. Enter your `<url>` and `<login>` information!
 3. Choose a unique `<topic>` which will be used by your bot to publish and subscribe!
    1. `<command>` is the topic you're **sending** _string_ commands to which could be _mute, unmute, deaf, undeaf and kick_!
