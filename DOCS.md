@@ -30,4 +30,4 @@ You can use [this Flow](https://gist.github.com/kjell5317/530394d028383119e9523e
 
 ## Customization
 
-The Node.js server uses [Discord.js](https://discord.js.org/#/), so you can highly customize the _server.js_ file to da everything you like.
+The Node.js server uses [Discord.js](https://discord.js.org/#/), so you can highly customize the _server.js_ file to everything you like.
