@@ -1,7 +1,8 @@
 {
   "name": "Discord Bot",
-  "version": "1.0.2",
+  "version": "1.0.1.1",
   "slug": "discord_bot",
+  "url": "https://github.com/kjell5317/addon-discord_bot",
   "description": "Discord bot running on a dockerized NodeJS server",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
   "startup": "application",
