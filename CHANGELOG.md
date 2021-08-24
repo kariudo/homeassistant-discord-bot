@@ -1,3 +1,5 @@
 # Changelog
 
-nothing to see here yet...
+## 1.0
+
+Release
