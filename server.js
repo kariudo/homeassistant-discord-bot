@@ -1,4 +1,4 @@
-//Variables
+// Variables
 const args = process.argv.slice(2);
 const bot_token = args[0];
 const mqtt_url = args[1];
@@ -11,15 +11,21 @@ const topic_voice = args[7];
 const guild_id = args[8];
 const your_id = args[9];
 
-//Discord
-const Discord = require("discord.js");
-const d_client = new Discord.Client();
+// Discord
+const { Client, Intents } = require("discord.js");
+const d_client = new Client({
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_PRESENCES,
+    Intents.FLAGS.GUILD_MEMBERS,
+  ],
+});
 
 d_client.on("ready", () => {
   console.info(`BOT logged in as ${d_client.user.username}!`);
 });
 
-//Mqtt
+// Mqtt
 const mqtt = require("mqtt");
 const options = {
   port: mqtt_port,
@@ -37,7 +43,7 @@ m_client.on("connect", () => {
   m_client.subscribe(topic_command);
 });
 
-//ERROR
+// Error
 m_client.on("error", (error) => {
   console.error(`MQTT ${error}`);
 });
@@ -45,7 +51,7 @@ m_client.on("close", () => {
   console.error("MQTT disconnected");
 });
 
-//Commands
+// Commands
 m_client.on("message", (topic, message) => {
   if (topic == topic_command) {
     const Server = d_client.guilds.cache.get(guild_id);
@@ -59,7 +65,7 @@ m_client.on("message", (topic, message) => {
         you.voice.setMute(true);
         break;
       case "kick":
-        you.voice.kick();
+        you.voice.disconnect();
         break;
       case "undeaf":
         you.voice.setDeaf(false);
@@ -74,9 +80,11 @@ m_client.on("message", (topic, message) => {
   }
 });
 
-//In Voicechannel?
+// In Voicechannel?
 d_client.on("voiceStateUpdate", (oldState, newState) => {
-  if (newState.channelID === null) {
+  console.log(newState.channelId);
+  if (newState.channelId === null) {
+    console.log(oldState.member.id);
     if (oldState.member.id === your_id) {
       m_client.publish(
         topic_voice,
@@ -84,6 +92,7 @@ d_client.on("voiceStateUpdate", (oldState, newState) => {
       );
     }
   } else {
+    console.log(newState.member.id);
     if (newState.member.id === your_id) {
       deaf = newState.member.voice.deaf;
       mute = newState.member.voice.mute;
@@ -93,11 +102,12 @@ d_client.on("voiceStateUpdate", (oldState, newState) => {
   }
 });
 
-//Online
+// Online
 d_client.on("presenceUpdate", () => {
   onlineMembers = d_client.guilds.cache
     .get(guild_id)
     .members.cache.filter((member) => member.presence.status !== "offline");
+  console.log(onlineMembers);
   online = [];
   onlineMembers.forEach((member) => {
     if (member.user.bot) return;
