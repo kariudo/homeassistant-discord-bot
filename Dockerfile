@@ -4,8 +4,8 @@ FROM $BUILD_FROM
 ENV LANG C.UTF-8
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN apk update && apk upgrade
-RUN apk add --no-cache --update \
+RUN apk update && \
+    apk add --no-cache \
     nodejs-current \
     npm
 
