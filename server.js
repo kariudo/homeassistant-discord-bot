@@ -107,8 +107,10 @@ d_client.on("voiceStateUpdate", (oldState, newState) => {
     if (newState.member.id === your_id) {
       deaf = newState.member.voice.deaf;
       mute = newState.member.voice.mute;
-      voice = `{"voice_connection": true, "mute": "${mute}", "deaf": "${deaf}"}`;
-      m_client.publish(topic_voice, voice);
+      m_client.publish(
+        topic_voice,
+        `{"voice_connection": true, "mute": "${mute}", "deaf": "${deaf}"}`
+      );
     }
   }
 });
@@ -126,8 +128,7 @@ d_client.on("presenceUpdate", () => {
       activity: presence.member.presence.activities,
     });
   });
-  online_json = JSON.stringify(online);
-  m_client.publish(topic_online, online_json);
+  m_client.publish(topic_online, JSON.stringify(online));
 });
 
 d_client.login(bot_token);
