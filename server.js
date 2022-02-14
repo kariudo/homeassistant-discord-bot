@@ -117,15 +117,15 @@ d_client.on("voiceStateUpdate", (oldState, newState) => {
 
 // Online
 d_client.on("presenceUpdate", () => {
-  let onlinePresences = d_client.guilds.cache
+  let onlineMember = d_client.guilds.cache
     .get(guild_id)
-    .presences.cache.filter((presence) => presence.status !== "offline");
+    .members.cache.filter((member) => member.presence.status !== "offline");
   online = [];
-  onlinePresences.forEach((presence) => {
-    if (presence.member.user.bot) return;
+  onlineMember.forEach((member) => {
+    if (member.user.bot) return;
     online.push({
-      username: presence.member.user.username,
-      activity: presence.member.presence.activities,
+      username: member.user.username,
+      activity: member.presence.activities,
     });
   });
   m_client.publish(topic_online, JSON.stringify(online));
