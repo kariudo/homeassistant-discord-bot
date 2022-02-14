@@ -88,7 +88,16 @@ m_client.on("message", (topic, message) => {
         you.voice.setMute(false);
         break;
       default:
-        console.error(`The Command '${message.toString()}' is not supported`);
+        d_client.user.setPresence({
+          activities: [
+            {
+              name: message.toString(),
+              type: "PLAYING",
+            },
+          ],
+          status: "online",
+        });
+      // console.error(`The Command '${message.toString()}' is not supported`);
     }
   }
 });
@@ -117,15 +126,15 @@ d_client.on("voiceStateUpdate", (oldState, newState) => {
 
 // Online
 d_client.on("presenceUpdate", () => {
-  let onlineMember = d_client.guilds.cache
+  let onlinePresences = d_client.guilds.cache
     .get(guild_id)
-    .members.cache.filter((member) => member.presence.status !== "offline");
+    .presences.cache.filter((presence) => presence.status !== "offline");
   online = [];
-  onlineMember.forEach((member) => {
-    if (member.user.bot) return;
+  onlinePresences.forEach((presence) => {
+    if (presence.member.user.bot) return;
     online.push({
-      username: member.user.username,
-      activity: member.presence.activities,
+      username: presence.member.user.username,
+      activity: presence.activities,
     });
   });
   m_client.publish(topic_online, JSON.stringify(online));
