@@ -120,7 +120,6 @@ d_client.on("presenceUpdate", () => {
     .presences.cache.filter((presence) => presence.status !== "offline");
   online = [];
   onlinePresences.forEach((presence) => {
-    console.log(presence.member.user.username);
     if (presence.member.user.bot) return;
     online.push({
       username: presence.member.user.username,
