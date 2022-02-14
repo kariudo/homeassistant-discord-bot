@@ -12,17 +12,31 @@ const guild_id = args[8];
 const your_id = args[9];
 
 // Discord
-const { Client, Intents } = require("discord.js");
+const { Client, Intents, Options } = require("discord.js");
 const d_client = new Client({
   intents: [
     Intents.FLAGS.GUILDS,
     Intents.FLAGS.GUILD_PRESENCES,
     Intents.FLAGS.GUILD_MEMBERS,
+    Intents.FLAGS.GUILD_VOICE_STATES,
   ],
+  makeCache: Options.cacheWithLimits({
+    ...Options.defaultMakeCacheSettings,
+    GuildMemberManager: 200,
+  }),
 });
 
 d_client.on("ready", () => {
   console.info(`BOT logged in as ${d_client.user.username}!`);
+  d_client.user.setPresence({
+    activities: [
+      {
+        name: "mit deiner Mom",
+        type: "PLAYING",
+      },
+    ],
+    status: "online",
+  });
 });
 
 // Mqtt
@@ -54,8 +68,7 @@ m_client.on("close", () => {
 // Commands
 m_client.on("message", (topic, message) => {
   if (topic == topic_command) {
-    const Server = d_client.guilds.cache.get(guild_id);
-    const you = Server.members.cache.get(your_id);
+    const you = d_client.guilds.cache.get(guild_id).members.cache.get(your_id);
     switch (message.toString()) {
       case "mute":
         you.voice.setMute(true);
@@ -82,9 +95,7 @@ m_client.on("message", (topic, message) => {
 
 // In Voicechannel?
 d_client.on("voiceStateUpdate", (oldState, newState) => {
-  console.log(newState.channelId);
   if (newState.channelId === null) {
-    console.log(oldState.member.id);
     if (oldState.member.id === your_id) {
       m_client.publish(
         topic_voice,
@@ -104,16 +115,16 @@ d_client.on("voiceStateUpdate", (oldState, newState) => {
 
 // Online
 d_client.on("presenceUpdate", () => {
-  onlineMembers = d_client.guilds.cache
+  let onlinePresences = d_client.guilds.cache
     .get(guild_id)
-    .members.cache.filter((member) => member.presence.status !== "offline");
-  console.log(onlineMembers);
+    .presences.cache.filter((presence) => presence.status !== "offline");
   online = [];
-  onlineMembers.forEach((member) => {
-    if (member.user.bot) return;
+  onlinePresences.forEach((presence) => {
+    console.log(presence.member.user.username);
+    if (presence.member.user.bot) return;
     online.push({
-      username: member.user.username,
-      activity: member.presence.activities,
+      username: presence.member.user.username,
+      activity: presence.member.presence.activities,
     });
   });
   online_json = JSON.stringify(online);
