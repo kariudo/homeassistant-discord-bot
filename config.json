@@ -31,5 +31,6 @@
     "guild_id": "str",
     "your_id": "str"
   },
-  "map": ["config"]
+  "map": ["config"],
+  "init": false
 }
