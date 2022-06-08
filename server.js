@@ -67,7 +67,7 @@ m_client.on("close", () => {
 
 // Commands
 m_client.on("message", (topic, message) => {
-  if (topic == topic_command) {
+  if (topic === topic_command) {
     const you = d_client.guilds.cache.get(guild_id).members.cache.get(your_id);
     switch (message.toString()) {
       case "mute":
@@ -114,8 +114,8 @@ d_client.on("voiceStateUpdate", (oldState, newState) => {
   } else {
     console.log(newState.member.id);
     if (newState.member.id === your_id) {
-      deaf = newState.member.voice.deaf;
-      mute = newState.member.voice.mute;
+      let deaf = newState.member.voice.deaf;
+      let mute = newState.member.voice.mute;
       m_client.publish(
         topic_voice,
         `{"voice_connection": true, "mute": "${mute}", "deaf": "${deaf}"}`
@@ -129,7 +129,7 @@ d_client.on("presenceUpdate", () => {
   let onlinePresences = d_client.guilds.cache
     .get(guild_id)
     .presences.cache.filter((presence) => presence.status !== "offline");
-  online = [];
+  let online = [];
   onlinePresences.forEach((presence) => {
     if (presence.member.user.bot) return;
     online.push({
