@@ -1,14 +1,18 @@
 {
-    "name": "discord_bot",
-    "version": "1.0.0",
-    "description": "Discord.js on Docker",
-    "author": "kjell5317",
-    "main": "server.js",
-    "scripts": {
-      "start": "node server.js"
-    },
-    "dependencies": {
-      "discord.js": "^13.1.0",
-      "mqtt": "^4.2.6"
-    }
+  "name": "discord_bot",
+  "version": "1.0.0",
+  "description": "Discord.js on Docker",
+  "author": "kjell5317",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kjell5317/discord-bot"
+  },
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "discord.js": "^13.1.0",
+    "mqtt": "^4.2.6"
+  }
 }
