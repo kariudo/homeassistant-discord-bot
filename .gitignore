@@ -1,2 +1,4 @@
 *.log
 secrets.*
+.env
+node_modules

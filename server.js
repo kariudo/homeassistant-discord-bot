@@ -1,18 +1,25 @@
+// Configure the dotenv
+require("dotenv-defaults").config({
+  path: "./.env",
+  encoding: "utf8",
+  defaults: "./.env.defaults",
+});
+
 // Variables
-const args = process.argv.slice(2);
-const bot_token = args[0];
-const mqtt_url = args[1];
-const mqtt_port = args[2];
-const mqtt_username = args[3];
-const mqtt_password = args[4];
-const topic_online = args[5];
-const topic_command = args[6];
-const topic_voice = args[7];
-const guild_id = args[8];
-const your_id = args[9];
+const bot_token = process.env.BOT_TOKEN;
+const mqtt_url = process.env.MQTT_URL;
+const mqtt_port = process.env.MQTT_PORT;
+const mqtt_username = process.env.MQTT_USERNAME;
+const mqtt_password = process.env.MQTT_PASSWORD;
+const mqtt_client_id = process.env.MQTT_CLIENT_ID;
+const topic_online = process.env.TOPIC_ONLINE;
+const topic_command = process.env.TOPIC_COMMAND;
+const topic_voice = process.env.TOPIC_VOICE;
+const guild_id = process.env.GUILD_ID;
+const your_id = process.env.YOUR_ID;
 
 // Discord
-const { Client, Intents, Options } = require("discord.js");
+import { Client, Intents, Options } from "discord.js";
 const d_client = new Client({
   intents: [
     Intents.FLAGS.GUILDS,
@@ -40,17 +47,17 @@ d_client.on("ready", () => {
 });
 
 // Mqtt
-const mqtt = require("mqtt");
+import { connect } from "mqtt";
 const options = {
   port: mqtt_port,
   host: mqtt_url,
-  clientId: "Node.js_" + Math.random().toString(16).substr(2, 8),
+  clientId: "discord_bot_" + mqtt_client_id,
   username: mqtt_username,
   password: mqtt_password,
   clean: true,
   resubscribe: false,
 };
-const m_client = mqtt.connect(mqtt_url, options);
+const m_client = connect(mqtt_url, options);
 
 m_client.on("connect", () => {
   console.info("MQTT connected");

@@ -1,11 +1,11 @@
 {
   "name": "discord_bot",
   "version": "1.0.0",
-  "description": "Discord.js on Docker",
-  "author": "kjell5317",
+  "description": "Home Assistant Discord.js Integration on Docker",
+  "author": "kariudo",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kjell5317/discord-bot"
+    "url": "https://github.com/kariudo/addon-discord_bot"
   },
   "main": "server.js",
   "scripts": {
@@ -13,6 +13,6 @@
   },
   "dependencies": {
     "discord.js": "^13.1.0",
-    "mqtt": "^4.2.6"
+    "mqtt": "^5.3.5"
   }
 }

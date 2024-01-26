@@ -1,11 +1,12 @@
-ARG BUILD_FROM
-FROM $BUILD_FROM
+FROM alpine:latest
 
 ENV LANG C.UTF-8
+
+RUN apk add --no-cache bash
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN apk update && \
-    apk add --no-cache \
+RUN apk add --no-cache \
     nodejs-current \
     npm
 
