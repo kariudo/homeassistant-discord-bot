@@ -1,41 +1,55 @@
 # Home Assistant Discord Bot
 
-A Discord Bot that reports if you are connected to a voice channel, who of your friends are online and what they're playing.
+This Discord Bot integrates with Home Assistant to provide voice channel connection status, online presence of friends,
+their current activities, and supports various commands such as mute, unmute, deaf, undeaf, moving users between voice
+channels, setting bot activities, and disconnecting from the voice channel.
 
-Supported commands:
+## Supported Commands
 
-- mute
-- unmute
-- deaf
-- undeaf
-- move {channel_name}
-- disconnect
-- bot_activity {activity}
+- `mute`
+- `unmute`
+- `deaf`
+- `undeaf`
+- `move {channel_name}`
+- `bot_activity {activity}`
+- `disconnect`
 
 ## Configuration
 
 ### Bot Token
 
 1. Visit [Discord Developer Portal](https://discord.com/developers/applications) and create an new Application!
-2. Create a Discord Bot within the Application and copy the **Bot Token** to `<bot_token>`!
+2. Create a Discord Bot within the Application and copy the **Bot Token** from the `Bot` sub-page to `<BOT_TOKEN>`.
+
+### Add the bot to the server
+
+1. Use the URL constructor on the OAUTH options on the Application to create the URL. You can remove any redirct URL and
+type parameters. You just need the ID, claims, permissions.
 
 ### MQTT
 
-1. Make sure you have [Mosquitto broker](https://github.com/home-assistant/addons/tree/master/mosquitto) up and running!
-2. Enter your `<url>` and `<login>` information!
-3. Choose a unique `<topic>` which will be used by your bot to publish and subscribe!
-   1. `<command>` is the topic you're **sending** _string_ commands to which could be _mute, unmute, deaf, undeaf and kick_!
-   2. `<online>` is the topic where you're **getting** information about your _online server mebers and their activities_ as a json!
-   3. `<voice>` **returns** a boolean if you're _connected to a voice channel_ and if you're muted or deafed!
+### MQTT Connection Setup
 
-### IDs
 
-1. After you or an admin added your bot to a server you can right-click on the server name to copy the `<guild_id>` (developer mode of your account has to be enabled)
-2. `<your_id>` can be found by right-clicking on your name in the users tab of the server!
+1. Ensure that the [Mosquitto broker](https://github.com/home-assistant/addons/tree/master/mosquitto) is installed and
+running on your Home Assistant instance.
+1. Specify the MQTT broker URL and credentials in the `.env` file:
+   - `MQTT_BROKER_URL` should be set to your MQTT broker's URL.
+   - `MQTT_BROKER_USERNAME` and `MQTT_BROKER_PASSWORD` should be set with your login credentials.
+2. Define unique MQTT topics in the `.env` file for the bot to publish and subscribe to:
+   - `MQTT_TOPIC_COMMAND` is used for sending string commands (see _Commands_).
+   - `MQTT_TOPIC_ONLINE` is used to receive information about online server members and their activities in JSON format.
+   - `MQTT_TOPIC_VOICE` indicates whether you are connected to a voice channel and if you are muted or deafened,
+returning a boolean value.
 
-## How to use
+### Configure the ID Values
 
-1. Subscribe to your choosen `<topics>` via [HomeAssistant](https://www.home-assistant.io/integrations/sensor.mqtt/) or NodeRED
-2. Publish your _commands_ to your choosen `<topic>`
+> Note: you will need to enable developer mode in your discord app settings to see the ID copy features in the context menus.
 
-You can use [this Flow](https://gist.github.com/kjell5317/530394d028383119e9523e777d2ac1ce) to filter your friends and use all available commands.
+1. After you or an admin added your bot to a server you can right-click on the server name to copy the `<GUILD_ID>`.
+2. `<YOUR_ID>` can be found by right-clicking on your name in the users tab of the server.
+2. `<BOT_ID>` can be found by right-clicking on the bot's name in the users tab of the server, it will need to be added to the server first for this..
+
+## Home Assistant Usage
+
+MQTT discovery should present a device in home assistant for you to configure with all the available sensors, selects, switches.

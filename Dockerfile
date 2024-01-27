@@ -2,19 +2,17 @@ FROM alpine:latest
 
 ENV LANG C.UTF-8
 
-RUN apk add --no-cache bash
+# Install Node.js
+RUN apk add --no-cache nodejs npm
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-RUN apk add --no-cache \
-    nodejs-current \
-    npm
-
+# Install dependencies
 COPY package.json /
 RUN cd / && npm install
-COPY server.js /
 
-COPY run.sh /
-RUN chmod +x /run.sh
+# Compile TypeScript to JavaScript
+COPY tsconfig.json /
+COPY src /src
+RUN npm run build
 
-CMD [ "node", "/server.js" ]
+# The build process will create the JavaScript files in a 'dist' directory (common convention)
+CMD [ "node", "/dist/server.js" ]
