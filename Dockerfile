@@ -14,5 +14,5 @@ COPY tsconfig.json /
 COPY src /src
 RUN npm run build
 
-# The build process will create the JavaScript files in a 'dist' directory (common convention)
-CMD [ "node", "/dist/server.js" ]
+# Run the compiled JavaScript
+CMD [ "npm", "run", "start" ]
