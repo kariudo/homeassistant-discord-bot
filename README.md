@@ -53,3 +53,13 @@ returning a boolean value.
 ## Home Assistant Usage
 
 MQTT discovery should present a device in home assistant for you to configure with all the available sensors, selects, switches.
+
+## Docker Support
+
+For the easiest use, just run the bot from docker with the published container image.
+
+You just need to setup the `.env` file with your configuration and provide it:
+
+```sh
+docker run -it -v /<path_to_your_dotenv>/.env:/.env ghcr.io/kariudo/hass-bot:latest
+```
