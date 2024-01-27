@@ -23,8 +23,8 @@ channels, setting bot activities, and disconnecting from the voice channel.
 
 ### Add the bot to the server
 
-1. Use the URL constructor on the OAUTH options on the Application to create the URL. You can remove any redirct URL and
-type parameters. You just need the ID, claims, permissions.
+1. You can use the generated invite link that is printed to the console at startup to add the bot to the serer with
+the required permissions.
 
 ### MQTT
 
