@@ -12,7 +12,8 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "discord.js": "^13.1.0",
+    "discord.js": "^14.14.1",
+    "dotenv-defaults": "^5.0.2",
     "mqtt": "^5.3.5"
   }
 }
