@@ -17,9 +17,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set a datetag variable
+        run: echo "DATETAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
       - name: Create image from repository
-        run: docker build -t ghcr.io/${{ github.actor }}/hass-bot .
-      - name: Push image to GitHub Container Registry
-        run: docker push ghcr.io/${{ github.actor }}/hass-bot:$(date +%Y%m%d%H%M%S)
+        run: docker build -t ghcr.io/${{ github.actor }}/hass-bot:latest -t ghcr.io/${{ github.actor }}/hass-bot:${{ env.DATETAG  }} .
+      - name: Push image to GitHub Container Registry with date tag
+        run: docker push ghcr.io/${{ github.actor }}/hass-bot:${{ env.DATETAG  }}
       - name: Push image to GitHub Container Registry as latest
         run: docker push ghcr.io/${{ github.actor }}/hass-bot:latest
