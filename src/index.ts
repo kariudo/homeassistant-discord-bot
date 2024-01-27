@@ -453,6 +453,7 @@ function getGuild(): Guild {
  */
 function setBotNickname(botNick: string): void {
   const bot = getBotMember();
+  console.log("Checking bot permissions to update nickname...");
   if (bot.permissions.has(PermissionFlagsBits.ChangeNickname)) {
     console.log("Setting bot nick: " + botNick);
     bot.setNickname(botNick);
