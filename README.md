@@ -4,19 +4,36 @@
 [![TypeScript](https://badgen.net/badge/icon/typescript?icon=typescript&label)](https://typescriptlang.org)
 [![Buymeacoffee](https://badgen.net/badge/icon/buymeacoffee?icon=buymeacoffee&label)](<[https://https://www.buymeacoffee.com/](https://www.buymeacoffee.com/kariudo)>)
 
-This Discord Bot integrates with Home Assistant to provide voice channel connection status, online presence of friends,
-their current activities, and supports various commands such as mute, unmute, deaf, undeaf, moving users between voice
-channels, setting bot activities, and disconnecting from the voice channel.
+The Home Assistant Discord Bot offers a pile of features designed to enhance your Discord experience by leveraging Home Assistant's capabilities. Some major functionalities include monitoring voice channel connections, tracking online presence and activities of friends, and executing commands for user and bot control. These commands enable users to mute or unmute themselves, deafen or undeafen, update the bot's activity status, and move your user between voice channels or just disconnect.
 
-## Supported Commands
+Leverage the above control with Home Assistant automations as well to give yourself clever control
+over your audio status or channel location. My favorite use so far is moving myself to
+our AFK channel whenever I leave my office, since I have a habit of forgetting, as well
+as moving me back or umuting me so I don't sit there talking to myself... as often 👍🏻.
 
-- `mute`
-- `unmute`
-- `deaf`
-- `undeaf`
-- `move {channel_name}`
-- `bot_activity {activity}`
-- `disconnect`
+## Supported Commands & Features
+
+- `mute`: Mutes the user in the voice channel.
+- `unmute`: Unmutes the user in the voice channel.
+- `deaf`: Deafens the user, so they can't hear others in the voice channel.
+- `undeaf`: Undeafens the user, allowing them to hear others in the voice channel.
+- `move {channel_name}`: Moves the user to the specified voice channel.
+- `bot_activity {activity}`: Sets the bot's current activity status.
+- `disconnect`: Disconnects the bot from the voice channel.
+
+## Screenshots
+
+### Dashboard
+
+Easily add access to your voice channel controls to Home Assistant, and leverage them for automations.
+
+![HomeAssistant Dashboard Card](screenshot_homeassistant_card.png)
+
+### Customizable Bot Name
+
+Customize the name of the bot on your server, and set its status based on automations.
+
+![Discord Bot](screenshot_discordbot.png)
 
 ## Configuration
 
