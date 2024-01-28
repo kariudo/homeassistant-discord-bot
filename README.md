@@ -1,5 +1,9 @@
 # Home Assistant Discord Bot
 
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-blu.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+[![TypeScript](https://badgen.net/badge/icon/typescript?icon=typescript&label)](https://typescriptlang.org)
+[![Buymeacoffee](https://badgen.net/badge/icon/buymeacoffee?icon=buymeacoffee&label)](<[https://https://www.buymeacoffee.com/](https://www.buymeacoffee.com/kariudo)>)
+
 This Discord Bot integrates with Home Assistant to provide voice channel connection status, online presence of friends,
 their current activities, and supports various commands such as mute, unmute, deaf, undeaf, moving users between voice
 channels, setting bot activities, and disconnecting from the voice channel.
