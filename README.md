@@ -22,7 +22,8 @@ channels, setting bot activities, and disconnecting from the voice channel.
 
 ### Bot Token
 
-1. Visit [Discord Developer Portal](https://discord.com/developers/applications) and create an new Application!
+1. Visit [Discord Developer Portal](https://discord.com/developers/applications) and create an new Application, you can
+name this whatever you want. The bot display name can be configured seperately via the `.env` configuration.
 2. Create a Discord Bot within the Application and copy the **Bot Token** from the `Bot` sub-page to `<BOT_TOKEN>`.
 
 ### Add the bot to the server
