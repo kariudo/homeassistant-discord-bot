@@ -11,33 +11,20 @@ import {
   Activity,
   GuildVoiceChannelResolvable,
   VoiceState,
-  GuildChannel,
   GuildBasedChannel,
   OAuth2Scopes,
+  ChannelType,
+  VoiceChannel,
+  Collection,
 } from "discord.js";
-import mqtt, { MqttClient, IClientOptions, OnMessageCallback } from "mqtt";
+import mqtt, { MqttClient, IClientOptions } from "mqtt";
 
+// Load environment variables
 dotenv.config({
   path: "./.env",
   encoding: "utf8",
   defaults: "./.env.defaults",
 });
-
-// interface MqttOptions extends IClientOptions {
-//   port: number;
-//   host: string;
-//   clientId: string;
-//   username: string;
-//   password: string;
-//   clean: boolean;
-//   resubscribe: boolean;
-//   will: {
-//     topic: string;
-//     payload: Buffer;
-//     qos: number;
-//     retain: boolean;
-//   };
-// }
 
 interface BotConfig {
   bot: {
@@ -53,6 +40,7 @@ interface BotConfig {
     clientId: string;
     topics: {
       connected: string;
+      discovery: string;
       online: string;
       command: string;
       voice: string;
@@ -69,6 +57,29 @@ interface BotConfig {
 interface UserPresence {
   username: string;
   activity: Activity[];
+}
+
+interface DiscoveryComponentConfig {
+  value_template?: string;
+  state_topic?: string;
+  unique_id: string;
+  name: string;
+  json_attributes_topic?: string;
+  device: Device;
+  icon?: string;
+  availability_topic?: string;
+  payload_available?: string;
+  payload_not_available?: string;
+}
+
+interface DiscoveryComponent {
+  topic: string;
+  payload: DiscoveryComponentConfig;
+}
+
+interface Device {
+  identifiers: string[];
+  name: string;
 }
 
 /**
@@ -93,6 +104,7 @@ function loadConfig(): BotConfig {
       clientId: process.env.MQTT_CLIENT_ID ?? throwError("MQTT_CLIENT_ID"),
       topics: {
         connected: process.env.TOPIC_CONNECTED ?? throwError("TOPIC_CONNECTED"),
+        discovery: process.env.TOPIC_DISCOVERY ?? throwError("TOPIC_DISCOVERY"),
         online: process.env.TOPIC_ONLINE ?? throwError("TOPIC_ONLINE"),
         command: process.env.TOPIC_COMMAND ?? throwError("TOPIC_COMMAND"),
         voice: process.env.TOPIC_VOICE ?? throwError("TOPIC_VOICE"),
@@ -125,7 +137,7 @@ console.log("         HASS BOT FOR DISCORD         ");
 console.log("======================================");
 // Print the configuration object
 console.log("Configuration:");
-console.log(config);
+console.debug(config);
 
 const d_client: Client = new Client({
   intents: [
@@ -140,7 +152,7 @@ const d_client: Client = new Client({
   }),
 });
 
-d_client.on("ready", () => {
+d_client.on("ready", async () => {
   if (!d_client.user) {
     throw new Error("User is null - bot client is not properly initialized.");
   }
@@ -148,7 +160,7 @@ d_client.on("ready", () => {
   // Generate an invite link and print to the console. (Must be logged in with the bot token)
   printInviteLink();
 
-  console.info(`Logged in as "${d_client.user.username}".`);
+  console.info(`Discord: Logged in as "${d_client.user.username}".`);
   d_client.user.setPresence({
     activities: [
       {
@@ -160,6 +172,9 @@ d_client.on("ready", () => {
   });
   // If permissions allow, set the nickname to the custom one.
   setBotNickname(config.bot.nickname);
+  // Set initial state of the user.
+  const self = await getSelf();
+  handleVoiceStatusUpdate(undefined, self.voice);
 });
 
 const options: IClientOptions = {
@@ -181,9 +196,18 @@ const options: IClientOptions = {
 const m_client: MqttClient = mqtt.connect(config.mqtt.url, options);
 
 m_client.on("connect", () => {
-  console.info("MQTT connected");
+  console.info("MQTT connected.");
+  // Bot command messages are sent on the command topic.
   m_client.subscribe(config.mqtt.topics.command);
-  m_client.publish(config.mqtt.topics.connected, "true");
+  // Home Assistant status messages are sent on the status topic.
+  m_client.subscribe("homeassistant/status");
+  // Send a connected message for the bot.
+  m_client.publish(config.mqtt.topics.connected, "true", {
+    qos: 1,
+    retain: true,
+  });
+  // Publish discovery messages.
+  publishDiscoveryMessages();
 });
 
 m_client.on("error", (error) => {
@@ -233,6 +257,10 @@ function handleMqttMessage(topic: string, message: Buffer): void {
   if (topic === config.mqtt.topics.command) {
     processCommand(message.toString());
   }
+  // Publish discovery components when the home assistant server's MQTT component is online.
+  if (topic === "homeassistant/status" && message.toString() === "online") {
+    publishDiscoveryMessages();
+  }
 }
 
 /**
@@ -241,8 +269,8 @@ function handleMqttMessage(topic: string, message: Buffer): void {
  * @param {string} message - the command message to be processed
  * @return {void}
  */
-function processCommand(message: string): void {
-  const you: GuildMember = getSelf();
+async function processCommand(message: string): Promise<void> {
+  const you: GuildMember = await getSelf();
   const args: string[] = message.toString().split(" ");
   if (args.length === 0) {
     console.error("Empty command, ignoring.");
@@ -252,24 +280,60 @@ function processCommand(message: string): void {
   const command: string = args.shift()!.toLowerCase();
   switch (command) {
     case "mute":
+      // Confirm the user is connected to a voice channel.
+      if (!you.voice.channel) {
+        console.error("User is not connected to a voice channel.");
+        return;
+      }
+      // Mute the user
       you.voice.setMute(true);
       break;
     case "deaf":
+      // Confirm the user is connected to a voice channel.
+      if (!you.voice.channel) {
+        console.error("User is not connected to a voice channel.");
+        return;
+      }
+      // Deafen and mute the user.
       you.voice.setDeaf(true);
       you.voice.setMute(true);
       break;
     case "undeaf":
+      // Confirm the user is connected to a voice channel.
+      if (!you.voice.channel) {
+        console.error("User is not connected to a voice channel.");
+        return;
+      }
+      // Undeafen and unmute the user.
       you.voice.setDeaf(false);
       you.voice.setMute(false);
       break;
     case "unmute":
+      // Confirm the user is connected to a voice channel.
+      if (!you.voice.channel) {
+        console.error("User is not connected to a voice channel.");
+        return;
+      }
+      // Unmute the user.
       you.voice.setMute(false);
       break;
     case "disconnect":
+      // Confirm the user is connected to a voice channel.
+      if (!you.voice.channel) {
+        console.error("User is not connected to a voice channel.");
+        return;
+      }
+      // Disconnect the user.
       you.voice.disconnect();
       console.log("Disconnecting from voice channel.");
       break;
     case "move":
+      // Confirm the user is connected to a voice channel.
+      if (!you.voice.channel) {
+        console.error("User is not connected to a voice channel.");
+        return;
+      }
+      // Move the user.
       const channelName: string = args.join(" ").trim().toLowerCase();
       moveToChannelByName(channelName, you);
       break;
@@ -293,7 +357,7 @@ function processCommand(message: string): void {
  * @return {void}
  */
 function setBotActivity(botActivity: string): void {
-  console.log("Setting bot activity: " + botActivity);
+  console.info("Setting bot activity: " + botActivity);
   if (!d_client.user) {
     throw new Error("User is null - bot client is not properly initialized.");
   }
@@ -314,10 +378,13 @@ function setBotActivity(botActivity: string): void {
  * @param {string} channelName - the name of the channel to move to
  * @param {GuildMember} you - the user to move
  */
-function moveToChannelByName(channelName: string, you: GuildMember): void {
-  const channel = getChannelByName(channelName);
+async function moveToChannelByName(
+  channelName: string,
+  you: GuildMember
+): Promise<void> {
+  const channel = await getChannelByName(channelName);
   if (channel) {
-    console.log("Moving to channel: " + channel.name);
+    console.info("Moving to channel: " + channel.name);
     if (you.voice.channel) {
       you.voice.setChannel(channel as GuildVoiceChannelResolvable);
     } else {
@@ -334,8 +401,15 @@ function moveToChannelByName(channelName: string, you: GuildMember): void {
  * @param {string} channelName - the name of the channel to retrieve
  * @return {void} the channel with the specified name
  */
-function getChannelByName(channelName: string): GuildBasedChannel {
-  const channel = getGuild().channels.cache.find(
+async function getChannelByName(
+  channelName: string
+): Promise<GuildBasedChannel> {
+  const guild = await getGuild();
+  const channels = (await guild.channels.fetch()) as Collection<
+    string,
+    GuildBasedChannel
+  >;
+  const channel = channels.find(
     (c) => c.name.toLowerCase() === channelName.toLowerCase()
   );
   if (!channel) throw new Error(`Channel "${channelName}" not found.`);
@@ -347,8 +421,9 @@ function getChannelByName(channelName: string): GuildBasedChannel {
  *
  * @return {GuildMember} The guild member object of the current user.
  */
-function getSelf(): GuildMember {
-  const member = getGuild().members.cache.get(config.you.id);
+async function getSelf(): Promise<GuildMember> {
+  const guild = await getGuild();
+  const member = guild.members.fetch(config.you.id);
   if (!member) {
     throw new Error(`Your member ID ${config.you.id} was not found in guild.`);
   }
@@ -358,23 +433,24 @@ function getSelf(): GuildMember {
 /**
  * Handles the voice status update for a member.
  *
- * @param {VoiceState} oldState - the old voice state
+ * @param {VoiceState} [oldState] - the old voice state
  * @param {VoiceState} newState - the new voice state
  */
 function handleVoiceStatusUpdate(
-  oldState: VoiceState,
+  oldState: VoiceState | undefined,
   newState: VoiceState
 ): void {
-  const memberId = oldState.member?.id ?? newState.member?.id;
+  const memberId = oldState?.member?.id ?? newState.member?.id;
   if (!memberId || memberId !== config.you.id) return;
 
   let voiceUpdateInfo = {
-    voice_connection: newState.channelId !== null,
+    // Binary Sensor in Home Assistant like "ON" or "OFF".
+    voice_connection: newState.channelId !== null ? "ON" : "OFF",
     mute: "unavailable",
     deaf: "unavailable",
     channel: "unavailable",
   };
-
+  console.debug("Voice status update:", voiceUpdateInfo);
   if (newState.channelId === null) {
     m_client.publish(config.mqtt.topics.voice, JSON.stringify(voiceUpdateInfo));
   } else {
@@ -384,8 +460,16 @@ function handleVoiceStatusUpdate(
       newState.member?.voice.deaf?.toString() ?? "unavailable";
     voiceUpdateInfo.channel =
       newState.member?.voice.channel?.name ?? "unavailable";
-    m_client.publish(config.mqtt.topics.voice, JSON.stringify(voiceUpdateInfo));
+    m_client.publish(
+      config.mqtt.topics.voice,
+      JSON.stringify(voiceUpdateInfo),
+      {
+        qos: 1,
+        retain: true,
+      }
+    );
   }
+  
 }
 
 /**
@@ -395,12 +479,13 @@ function handleVoiceStatusUpdate(
  * @param {Presence | undefined} _newPresence - the new presence information
  * @return {void}
  */
-function handlePresenceUpdate(
+async function handlePresenceUpdate(
   _oldPresence: Presence | null,
   _newPresence: Presence | null
-): void {
+): Promise<void> {
+  const guild = await getGuild();
   // Get the online presences from the guild.
-  let onlinePresences = getGuild().presences.cache.filter(
+  let onlinePresences = guild.presences.cache.filter(
     (presence: Presence) => presence.status !== "offline"
   );
   let online: UserPresence[] = [];
@@ -426,10 +511,11 @@ function handlePresenceUpdate(
 /**
  * Retrieve the bot member from the guild.
  *
- * @return {GuildMember} The bot member from the guild.
+ * @return {Promise<GuildMember>} The bot member from the guild.
  */
-function getBotMember(): GuildMember {
-  const botMember: GuildMember | null = getGuild().members.me;
+async function getBotMember(): Promise<GuildMember> {
+  const guild = await getGuild();
+  const botMember: GuildMember | null = guild.members.me;
   if (!botMember) throw new Error("Bot member not found.");
   return botMember;
 }
@@ -439,8 +525,8 @@ function getBotMember(): GuildMember {
  *
  * @return {Guild} The retrieved guild.
  */
-function getGuild(): Guild {
-  const guild: Guild | undefined = d_client.guilds.cache.get(config.guild.id);
+async function getGuild() {
+  const guild = (await d_client.guilds.fetch(config.guild.id)) as Guild;
   if (!guild) throw new Error("Guild not found.");
   return guild;
 }
@@ -451,15 +537,163 @@ function getGuild(): Guild {
  * @param {string} botNick - the new nickname for the bot
  * @return {void}
  */
-function setBotNickname(botNick: string): void {
-  const bot = getBotMember();
-  console.log("Checking bot permissions to update nickname...");
+async function setBotNickname(botNick: string): Promise<void> {
+  const bot = await getBotMember();
+  console.debug("Checking bot permissions to update nickname...");
   if (bot.permissions.has(PermissionFlagsBits.ChangeNickname)) {
-    console.log("Setting bot nick: " + botNick);
+    console.info("Setting bot nick: " + botNick);
     bot.setNickname(botNick);
   } else {
     console.error(
       "The bot does not have permission to change nicknames. Requires CHANGE_NICKNAME."
     );
   }
+}
+
+async function publishDiscoveryMessages() {
+  console.debug("Home Assistant MQTT Online: Publishing discovery messages...");
+  const deviceId = `discordUser_${config.you.id}`;
+  // A list of discovery components to publish.
+  const discoveryComponents = [];
+  // A common device for the components.
+  const device = {
+    identifiers: [deviceId],
+    name: "Discord User",
+  };
+
+  // Voice connection sensor.
+  discoveryComponents.push({
+    topic: `${config.mqtt.topics.discovery}/binary_sensor/${deviceId}/voice/config`,
+    payload: {
+      name: "Discord User Voice Connection",
+      value_template: "{{ value_json.voice_connection }}",
+      state_topic: config.mqtt.topics.voice,
+      unique_id: `${deviceId}_voice`,
+      json_attributes_topic: config.mqtt.topics.voice,
+      device: device,
+      device_class: "connectivity",
+    },
+  });
+
+  // Mute switch.
+  discoveryComponents.push({
+    topic: `${config.mqtt.topics.discovery}/switch/${deviceId}/mute/config`,
+    payload: {
+      name: "Discord User Mute",
+      device_class: "switch",
+      command_topic: config.mqtt.topics.command,
+      state_topic: config.mqtt.topics.voice,
+      state_on: "true",
+      state_off: "false",
+      value_template: "{{ value_json.mute }}",
+      unique_id: `${deviceId}_mute`,
+      device: device,
+      payload_on: "mute",
+      payload_off: "unmute",
+      icon: "mdi:microphone-off",
+      // Only available whened connected.
+      availability_topic: config.mqtt.topics.voice,
+      availability_template: "{{ value_json.voice_connection }}",
+      payload_available: "ON",
+      payload_not_available: "OFF",
+    },
+  });
+
+  // Deaf switch.
+  discoveryComponents.push({
+    topic: `${config.mqtt.topics.discovery}/switch/${deviceId}/deaf/config`,
+    payload: {
+      name: "Discord User Deafen",
+      device_class: "switch",
+      command_topic: config.mqtt.topics.command,
+      state_topic: config.mqtt.topics.voice,
+      state_on: "true",
+      state_off: "false",
+      value_template: "{{ value_json.deaf }}",
+      unique_id: `${deviceId}_deaf`,
+      device: device,
+      payload_on: "deaf",
+      payload_off: "undeaf",
+      icon: "mdi:headphones-off",
+      // Only available when connected.
+      availability_topic: config.mqtt.topics.voice,
+      availability_template: "{{ value_json.voice_connection }}",
+      payload_available: "ON",
+      payload_not_available: "OFF",
+    },
+  });
+
+  // TODO: this doesnt show up at all in the UI
+  // Create a channel selector.
+  discoveryComponents.push({
+    topic: `${config.mqtt.topics.discovery}/select/${deviceId}/channel/config`,
+    payload: {
+      name: "Discord User Channel Selector",
+      options: await getVoiceChannelNames(),
+      command_topic: config.mqtt.topics.command,
+      state_topic: config.mqtt.topics.voice,
+      command_template: "move {{ value }}",
+      value_template: "{{ value_json.channel }}",
+      unique_id: `${deviceId}_channel`,
+      device: device,
+      icon: "mdi:account-voice",
+      // Only available when already connected to a voice channel.
+      availability_topic: config.mqtt.topics.voice,
+      availability_template: "{{ value_json.voice_connection }}",
+      payload_available: "ON",
+      payload_not_available: "OFF",
+    },
+  });
+
+  // Disconnect button.
+  discoveryComponents.push({
+    topic: `${config.mqtt.topics.discovery}/button/${deviceId}/disconnect/config`,
+    payload: {
+      name: "Discord User Disconnect",
+      command_topic: config.mqtt.topics.command,
+      state_topic: config.mqtt.topics.voice,
+      command_template: "disconnect",
+      unique_id: `${deviceId}_disconnect`,
+      device: device,
+      icon: "mdi:account-off",
+      // Only available when already connected to a voice channel.
+      availability_topic: config.mqtt.topics.voice,
+      availability_template: "{{ value_json.voice_connection }}",
+      payload_available: "ON",
+      payload_not_available: "OFF",
+    },
+  })
+
+  // Publish all the discovery components.
+  discoveryComponents.forEach((component) => {
+    m_client.publish(component.topic, JSON.stringify(component.payload), {
+      qos: 1,
+      retain: false, // No need to retain, as we publish when Home Assistant is online.
+    });
+  });
+}
+
+/**
+ * Retrieve the voice channels from the cache of the current guild.
+ *
+ * @return {Collection<VoiceChannel>} The voice channels in the guild cache.
+ */
+
+async function getVoiceChannels() {
+  const guild = await getGuild();
+  // wait for the voice channels to be cached
+  var channels = await guild.channels.fetch();
+  return channels.filter(
+    (c) => c?.type === ChannelType.GuildVoice
+  ) as Collection<string, VoiceChannel>;
+}
+
+/**
+ * Retrieve the names of the voice channels from the cache of the current guild.
+ *
+ * @return {string[]} The names of the voice channels in the guild cache.
+ */
+async function getVoiceChannelNames(): Promise<string[]> {
+  const channels = await getVoiceChannels();
+  return channels.map((channel) => channel.name);
 }
