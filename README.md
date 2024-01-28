@@ -65,5 +65,5 @@ For the easiest use, just run the bot from docker with the published container i
 You just need to setup the `.env` file with your configuration and provide it:
 
 ```sh
-docker run -it -v /<path_to_your_dotenv>/.env:/.env ghcr.io/kariudo/hass-bot:latest
+docker run -it -v /<path_to_your_dotenv>/.env:/.env ghcr.io/kariudo/homeassistant-discord-bot:latest
 ```
