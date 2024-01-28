@@ -1,11 +1,11 @@
 {
-  "name": "hass-bot",
-  "version": "1.0.0",
+  "name": "homeassistant-discord-bot",
+  "version": "1.1.0",
   "description": "Home Assistant Discord.js Integration on Docker",
   "author": "kariudo",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kariudo/addon-discord_bot"
+    "url": "https://github.com/kariudo/homeassistant-discord-bot"
   },
   "main": "server.js",
   "scripts": {
