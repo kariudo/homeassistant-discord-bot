@@ -1,13 +1,16 @@
 import { DiscoveryComponent } from "./models/DiscoveryComponent";
 import { getVoiceChannelNames } from "./discordUtility";
-import { config, m_client } from '.';
+import { BotConfig } from './models/BotConfig';
+import { Client } from 'discord.js';
+import { MqttClient } from 'mqtt';
 
 /**
  * Asynchronously publishes discovery messages for Home Assistant MQTT integration.
  *
+ * @param {BotConfig} config - the bot configuration
  * @return {Promise<void>} No return value
  */
-export async function publishDiscoveryMessages(): Promise<void> {
+export async function publishDiscoveryMessages(mqttClient: MqttClient, discordClient: Client, config: BotConfig): Promise<void> {
   console.debug("Home Assistant MQTT Online: Publishing discovery messages...");
   const deviceId = `discordUser_${config.you.id}`;
   // A list of discovery components to publish.
@@ -32,6 +35,18 @@ export async function publishDiscoveryMessages(): Promise<void> {
       json_attributes_topic: config.mqtt.topics.voice,
       device: device,
       device_class: "connectivity",
+    },
+  });
+  
+  // Users Online sensor.
+  discoveryComponents.push({
+    topic: `${config.mqtt.topics.discovery}/sensor/${deviceId}/users_online/config`,
+    payload: {
+      name: "Discord User Guild Users Online",
+      state_topic: config.mqtt.topics.online + '/count',
+      json_attributes_topic: config.mqtt.topics.online,
+      unique_id: `${deviceId}_users_online`,
+      device: device,
     },
   });
 
@@ -88,7 +103,7 @@ export async function publishDiscoveryMessages(): Promise<void> {
     topic: `${config.mqtt.topics.discovery}/select/${deviceId}/channel/config`,
     payload: {
       name: "Discord User Channel Selector",
-      options: await getVoiceChannelNames(),
+      options: await getVoiceChannelNames(discordClient, config),
       command_topic: config.mqtt.topics.command,
       state_topic: config.mqtt.topics.voice,
       command_template: "move {{ value }}",
@@ -125,7 +140,7 @@ export async function publishDiscoveryMessages(): Promise<void> {
 
   // Publish all the discovery components.
   discoveryComponents.forEach((component) => {
-    m_client.publish(component.topic, JSON.stringify(component.payload), {
+    mqttClient.publish(component.topic, JSON.stringify(component.payload), {
       qos: 1,
       retain: false, // No need to retain, as we publish when Home Assistant is online.
     });

@@ -16,6 +16,7 @@ export interface DiscoveryComponentConfig {
   unique_id: string;
   name: string;
   json_attributes_topic?: string;
+  json_attributes_template?: string;
   device: Device;
   icon?: string;
   options?: string[];

@@ -1,36 +1,43 @@
-import { ActivityType } from "discord.js";
+import { ActivityType, Client } from "discord.js";
 import { getSelf } from "./discordUtility";
 import { printInviteLink } from "./discordUtility";
-import { handleVoiceStatusUpdate } from "./handleVoiceStatusUpdate";
 import { setBotNickname } from "./discordUtility";
-import { d_client, config } from '.';
+import { BotConfig } from './models/BotConfig';
+import { createHandleVoiceStatusUpdate } from './handleVoiceStatusUpdate';
+import { MqttClient } from 'mqtt/*';
 
 /**
- * Asynchronous function to handle the Discord ready event.
+ * Creates a handle for when the Discord client is ready. 
  *
- * @return {Promise<void>} Promise that resolves when the function completes.
+ * @param {Client} discordClient - the Discord client
+ * @param {MqttClient} mqttClient - the MQTT client
+ * @return {() => Promise<void>} a function that returns a promise of void
  */
-export const handleDiscordReady = async () => {
-  if (!d_client.user) {
-    throw new Error("User is null - bot client is not properly initialized.");
-  }
+export const createHandleDiscordReady = (discordClient: Client, mqttClient: MqttClient, config: BotConfig): () => Promise<void> => {
+  const handler = async (): Promise<void> => {
+    if (!discordClient.user) {
+      throw new Error("User is null - bot client is not properly initialized.");
+    }
 
-  // Generate an invite link and print to the console. (Must be logged in with the bot token)
-  printInviteLink();
+    // Generate an invite link and print to the console. (Must be logged in with the bot token)
+    printInviteLink(discordClient);
 
-  console.info(`Discord: Logged in as "${d_client.user.username}".`);
-  d_client.user.setPresence({
-    activities: [
-      {
-        name: "🏠 Watching the house",
-        type: ActivityType.Custom,
-      },
-    ],
-    status: "online",
-  });
-  // If permissions allow, set the nickname to the custom one.
-  setBotNickname(config.bot.nickname);
-  // Set initial state of the user.
-  const self = await getSelf();
-  handleVoiceStatusUpdate(undefined, self.voice);
+    console.info(`Discord: Logged in as "${discordClient.user.username}".`);
+    discordClient.user.setPresence({
+      activities: [
+        {
+          name: "🏠 Watching the house",
+          type: ActivityType.Custom,
+        },
+      ],
+      status: "online",
+    });
+    // If permissions allow, set the nickname to the custom one.
+    setBotNickname(config.bot.nickname, discordClient, config);
+    // Set initial state of the user.
+    const self = await getSelf(discordClient, config);
+    createHandleVoiceStatusUpdate(mqttClient, config)(undefined, self.voice);
+  };
+
+  return handler;
 };

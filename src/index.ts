@@ -1,23 +1,18 @@
 import dotenv from "dotenv-defaults";
-import {
-  Client,
-  GatewayIntentBits,
-  Options,
-  GuildMember,
-} from "discord.js";
-import mqtt, { MqttClient, IClientOptions } from "mqtt";
 
 import { BotConfig } from "./models/BotConfig";
 import { loadConfig } from "./loadConfig";
-import { processCommand } from "./processCommand";
-import { handleVoiceStatusUpdate } from "./handleVoiceStatusUpdate";
-import { handlePresenceUpdate } from "./handlePresenceUpdate";
-import { getGuild } from "./discordUtility";
-import { publishDiscoveryMessages } from './publishDiscoveryMessages';
-import { handleDiscordReady } from './handleDiscordReady';
-import { handleMqttConnect } from './handleMqttConnect';
+import { createHandleVoiceStatusUpdate } from "./handleVoiceStatusUpdate";
+import { createHandlePresenceUpdate } from "./handlePresenceUpdate";
+import { createHandleDiscordReady } from './handleDiscordReady';
+import { CreateHandleMqttReady } from './handleMqttConnect';
 import { handleMqttError } from './handleMqttError';
 import { handleMqttDisconnect } from './handleMqttDisconnect';
+import { createHandleMqttMessage } from './handleMqttMessage';
+import { createMqttClient } from './mqttClient';
+import { createDiscordClient } from './discordClient';
+import { Client } from 'discord.js';
+import { MqttClient } from 'mqtt/*';
 
 // Load environment variables
 dotenv.config({
@@ -49,75 +44,18 @@ console.debug({
   mqtt: { ...config.mqtt, password: '***' }
 });
 
-// Configure and create a discord bot client.
-const discordClientOptions = {
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildPresences,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildVoiceStates,
-  ],
-  makeCache: Options.cacheWithLimits({
-    ...Options.DefaultMakeCacheSettings,
-    GuildMemberManager: 200,
-  }),
-};
-export const d_client: Client = new Client(discordClientOptions);
+// Create the clients.
+const discordClient: Client = createDiscordClient();
+const mqttClient: MqttClient = createMqttClient(config, discordClient);
 
-d_client.on("ready", handleDiscordReady);
+// Bind handlers to listeners.
+mqttClient.on("connect", CreateHandleMqttReady(mqttClient, discordClient, config));
+mqttClient.on("error", handleMqttError);
+mqttClient.on("close", handleMqttDisconnect);
+mqttClient.on("message", createHandleMqttMessage(mqttClient, discordClient, config));
+discordClient.on("ready", createHandleDiscordReady(discordClient, mqttClient, config));
+discordClient.on("voiceStateUpdate", createHandleVoiceStatusUpdate( mqttClient, config));
+discordClient.on("presenceUpdate", createHandlePresenceUpdate(discordClient, mqttClient, config));
 
-// Configure and create an MQTT client.
-const mqttClientOptions: IClientOptions = {
-  port: Number(config.mqtt.port) || 1883,
-  host: config.mqtt.url,
-  clientId: "discord_bot_" + config.mqtt.clientId,
-  username: config.mqtt.username,
-  password: config.mqtt.password,
-  clean: true,
-  resubscribe: false,
-  will: {
-    topic: config.mqtt.topics.connected,
-    payload: Buffer.from("false"),
-    qos: 1,
-    retain: true,
-  },
-};
-export const m_client: MqttClient = mqtt.connect(config.mqtt.url, mqttClientOptions);
-
-m_client.on("connect", handleMqttConnect);
-m_client.on("error", handleMqttError);
-m_client.on("close", handleMqttDisconnect);
-m_client.on("message", handleMqttMessage);
-d_client.on("voiceStateUpdate", handleVoiceStatusUpdate);
-d_client.on("presenceUpdate", handlePresenceUpdate);
-d_client.login(config.bot.token);
-
-/**
- * Handles the MQTT message by processing a command if the topic is the command
- * topic.
- *
- * @param {string} topic - The MQTT topic of the message
- * @param {Buffer} message - The message payload
- * @return {void}
- */
-function handleMqttMessage(topic: string, message: Buffer): void {
-  if (topic === config.mqtt.topics.command) {
-    processCommand(message.toString());
-  }
-  // Publish discovery components when the home assistant server's MQTT component is online.
-  if (topic === "homeassistant/status" && message.toString() === "online") {
-    publishDiscoveryMessages();
-  }
-}
-
-/**
- * Retrieve the bot member from the guild.
- *
- * @return {Promise<GuildMember>} The bot member from the guild.
- */
-export async function getBotMember(): Promise<GuildMember> {
-  const guild = await getGuild();
-  const botMember: GuildMember | null = guild.members.me;
-  if (!botMember) throw new Error("Bot member not found.");
-  return botMember;
-}
+// Connect to Discord.
+discordClient.login(config.bot.token);
