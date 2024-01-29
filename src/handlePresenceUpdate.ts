@@ -41,10 +41,11 @@ export const createHandlePresenceUpdate = (
       };
       online.push(userPresence);
     });
+    const stringOfUsers = JSON.stringify(online);
     // Publish the online list to the MQTT topic.
     mqttClient.publish(
       config.mqtt.topics.online,
-      JSON.stringify({ online: online })
+      JSON.stringify({ online: stringOfUsers })
     );
     // Also publish a count of the users online.
     mqttClient.publish(
