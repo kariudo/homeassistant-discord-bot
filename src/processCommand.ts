@@ -1,17 +1,20 @@
-import { GuildMember } from "discord.js";
+import { Client, GuildMember } from "discord.js";
 import { setBotNickname } from './discordUtility';
 import { setBotActivity } from './discordUtility';
 import { moveToChannelByName } from './discordUtility';
 import { getSelf } from './discordUtility';
+import { BotConfig } from './models/BotConfig';
 
 /**
  * Process a command message and execute corresponding actions.
  *
  * @param {string} message - the command message to be processed
- * @return {void}
+ * @param {Client} discordClient - the discord client
+ * @param {BotConfig} config - the bot configuration
+ * @return {Promise<void>}
  */
-export async function processCommand(message: string): Promise<void> {
-  const you: GuildMember = await getSelf();
+export async function processCommand(message: string, discordClient: Client, config: BotConfig): Promise<void> {
+  const you: GuildMember = await getSelf(discordClient, config);
   const args: string[] = message.toString().split(" ");
   if (args.length === 0) {
     console.error("Empty command, ignoring.");
@@ -76,15 +79,15 @@ export async function processCommand(message: string): Promise<void> {
       }
       // Move the user.
       const channelName: string = args.join(" ").trim().toLowerCase();
-      moveToChannelByName(channelName, you);
+      moveToChannelByName(channelName, you, discordClient, config);
       break;
     case "bot_activity":
       const botActivity: string = args.join(" ").trim();
-      setBotActivity(botActivity);
+      setBotActivity(discordClient, botActivity);
       break;
     case "bot_nick":
       const botNick: string = args.join(" ").trim();
-      setBotNickname(botNick);
+      setBotNickname(botNick, discordClient, config);
       break;
     default:
       console.error(`The command '${command}' is not supported.`);
