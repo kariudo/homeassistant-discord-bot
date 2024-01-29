@@ -23,6 +23,12 @@ as moving me back or umuting me so I don't sit there talking to myself... as oft
 
 ## Screenshots
 
+### Device
+
+Exposed sensors and controls are grouped together as a single `Discord` device.
+
+![Device](screenshot_device.png)
+
 ### Dashboard
 
 Easily add access to your voice channel controls to Home Assistant, and leverage them for automations.
