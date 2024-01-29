@@ -76,6 +76,19 @@ returning a boolean value.
 
 MQTT discovery should present a device in home assistant for you to configure with all the available sensors, selects, switches.
 
+### Direct Command Service
+
+You can call commands directly (i.e.; to set the bot's activity etc.) using the `mqtt.publish` service:
+
+```yml
+service: mqtt.publish
+data:
+  qos: "0"
+  retain: false
+  topic: discordbot/command
+  payload: bot_activity 🌮Thinking about tacos
+```
+
 ## Docker Support
 
 For the easiest use, just run the bot from docker with the published container image.
