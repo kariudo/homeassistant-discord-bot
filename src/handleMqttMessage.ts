@@ -23,7 +23,7 @@ export const createHandleMqttMessage = (mqttClient: MqttClient, discordClient: C
    */
   const handleMqttMessage = (topic: string, message: Buffer): void => {
     if (topic === config.mqtt.topics.command)
-      processCommand(message.toString());
+      processCommand(message.toString(), discordClient, config);
     if (topic === "homeassistant/status" && message.toString() === "online")
       publishDiscoveryMessages(mqttClient, discordClient, config);
   };
