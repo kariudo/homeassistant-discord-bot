@@ -53,16 +53,24 @@ the required permissions.
 ### MQTT Connection Setup
 
 
-1. Ensure that the [Mosquitto broker](https://github.com/home-assistant/addons/tree/master/mosquitto) is installed and
-running on your Home Assistant instance.
-1. Specify the MQTT broker URL and credentials in the `.env` file:
+1. Ensure that you have a configured `MQTT` broker and integration in Home Assitant.
+2. Specify the MQTT broker URL and credentials in the `.env` file:
    - `MQTT_BROKER_URL` should be set to your MQTT broker's URL.
    - `MQTT_BROKER_USERNAME` and `MQTT_BROKER_PASSWORD` should be set with your login credentials.
-2. Define unique MQTT topics in the `.env` file for the bot to publish and subscribe to:
-   - `MQTT_TOPIC_COMMAND` is used for sending string commands (see _Commands_).
-   - `MQTT_TOPIC_ONLINE` is used to receive information about online server members and their activities in JSON format.
-   - `MQTT_TOPIC_VOICE` indicates whether you are connected to a voice channel and if you are muted or deafened,
-returning a boolean value.
+3. *[Optional]* Customize your MQTT topics in the `.env` file:
+
+   ```conf
+   # Home Asssistant discovery topic
+   TOPIC_DISCOVERY=homeassistant
+   # Bot connected status topic
+   TOPIC_CONNECTED=discordbot/connected
+   # Online guild memebers topic
+   TOPIC_ONLINE=discordbot/online
+   # Command topic
+   TOPIC_COMMAND=discordbot/command
+   # User connection status topic
+   TOPIC_VOICE=discordbot/voice
+   ```
 
 ### Configure the ID Values
 
