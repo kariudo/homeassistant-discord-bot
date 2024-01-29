@@ -41,7 +41,13 @@ console.log("         HASS BOT FOR DISCORD         ");
 console.log("======================================");
 // Print the configuration object
 console.log("Configuration:");
-console.debug(config);
+// Tokens and passwords are masked by default for security, you can comment
+// those lines if you want to see them.
+console.debug({
+  ...config,
+  bot: { ...config.bot, token: '***' },
+  mqtt: { ...config.mqtt, password: '***' }
+});
 
 // Configure and create a discord bot client.
 const discordClientOptions = {
