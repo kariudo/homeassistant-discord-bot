@@ -1,11 +1,10 @@
 import { VoiceState } from "discord.js";
 import { MqttClient } from "mqtt/*";
-import { BotConfig } from './models/BotConfig';
-
+import { BotConfig } from "./models/BotConfig";
 
 /**
  * Create a handler for voice status updates.
- * 
+ *
  * @param {MqttClient} mqttClient - the MQTT client
  * @param {BotConfig} config - the bot configuration
  * @returns the voice status update handler
@@ -34,7 +33,6 @@ export const createHandleVoiceStatusUpdate = (
       deaf: "unavailable",
       channel: "unavailable",
     };
-    console.debug("Voice status update:", voiceUpdateInfo);
     if (newState.channelId === null) {
       mqttClient.publish(
         config.mqtt.topics.voice,
@@ -56,6 +54,8 @@ export const createHandleVoiceStatusUpdate = (
         }
       );
     }
-  }
+    console.debug("Voice status update:", voiceUpdateInfo);
+  };
+
   return handleVoiceStatusUpdate;
 };
