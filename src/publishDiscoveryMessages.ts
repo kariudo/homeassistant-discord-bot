@@ -18,9 +18,9 @@ export async function publishDiscoveryMessages(mqttClient: MqttClient, discordCl
   // A common device for the components.
   const device = {
     identifiers: [deviceId],
-    name: "Discord User",
+    name: "Discord",
     configuration_url: "https://github.com/kariudo/homeassistant-discord-bot",
-    model: "Discord user voice bot integration",
+    model: "Discord voice bot integration",
     manufacturer: "Kariudo",
   };
 
@@ -28,7 +28,7 @@ export async function publishDiscoveryMessages(mqttClient: MqttClient, discordCl
   discoveryComponents.push({
     topic: `${config.mqtt.topics.discovery}/binary_sensor/${deviceId}/voice/config`,
     payload: {
-      name: "Discord User Voice Connection",
+      name: "Discord Voice Connection",
       value_template: "{{ value_json.voice_connection }}",
       state_topic: config.mqtt.topics.voice,
       unique_id: `${deviceId}_voice`,
@@ -42,7 +42,7 @@ export async function publishDiscoveryMessages(mqttClient: MqttClient, discordCl
   discoveryComponents.push({
     topic: `${config.mqtt.topics.discovery}/sensor/${deviceId}/users_online/config`,
     payload: {
-      name: "Discord User Guild Users Online",
+      name: "Discord Guild Users Online",
       state_topic: config.mqtt.topics.online + '/count',
       json_attributes_topic: config.mqtt.topics.online,
       unique_id: `${deviceId}_users_online`,
@@ -54,7 +54,7 @@ export async function publishDiscoveryMessages(mqttClient: MqttClient, discordCl
   discoveryComponents.push({
     topic: `${config.mqtt.topics.discovery}/switch/${deviceId}/mute/config`,
     payload: {
-      name: "Discord User Mute",
+      name: "Discord Mute",
       device_class: "switch",
       command_topic: config.mqtt.topics.command,
       state_topic: config.mqtt.topics.voice,
@@ -78,7 +78,7 @@ export async function publishDiscoveryMessages(mqttClient: MqttClient, discordCl
   discoveryComponents.push({
     topic: `${config.mqtt.topics.discovery}/switch/${deviceId}/deaf/config`,
     payload: {
-      name: "Discord User Deafen",
+      name: "Discord Deafen",
       device_class: "switch",
       command_topic: config.mqtt.topics.command,
       state_topic: config.mqtt.topics.voice,
@@ -102,7 +102,7 @@ export async function publishDiscoveryMessages(mqttClient: MqttClient, discordCl
   discoveryComponents.push({
     topic: `${config.mqtt.topics.discovery}/select/${deviceId}/channel/config`,
     payload: {
-      name: "Discord User Channel Selector",
+      name: "Discord Channel Selector",
       options: await getVoiceChannelNames(discordClient, config),
       command_topic: config.mqtt.topics.command,
       state_topic: config.mqtt.topics.voice,
@@ -123,7 +123,7 @@ export async function publishDiscoveryMessages(mqttClient: MqttClient, discordCl
   discoveryComponents.push({
     topic: `${config.mqtt.topics.discovery}/button/${deviceId}/disconnect/config`,
     payload: {
-      name: "Discord User Disconnect",
+      name: "Discord Disconnect",
       command_topic: config.mqtt.topics.command,
       state_topic: config.mqtt.topics.voice,
       command_template: "disconnect",
