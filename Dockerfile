@@ -32,5 +32,4 @@ COPY --from=prerelease /usr/src/app/dist/index.js .
 COPY --from=prerelease /usr/src/app/package.json .
 
 # run the app
-USER bun
 ENTRYPOINT [ "bun", "run", "index.js" ]
