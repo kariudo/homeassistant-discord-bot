@@ -24,6 +24,8 @@ COPY . .
 # build
 ENV NODE_ENV=production
 RUN bun run build
+RUN pwd
+RUN ls
 
 # copy production dependencies and source code into final image
 FROM base AS release
