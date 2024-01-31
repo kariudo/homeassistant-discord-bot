@@ -1,6 +1,8 @@
+#!/usr/bin/env bun
+
 import dotenv from "dotenv-defaults";
 
-import { BotConfig } from "./models/BotConfig";
+import type { BotConfig } from "./models/BotConfig";
 import { loadConfig } from "./loadConfig";
 import { createHandleVoiceStatusUpdate } from "./handleVoiceStatusUpdate";
 import { createHandlePresenceUpdate } from "./handlePresenceUpdate";
@@ -12,7 +14,7 @@ import { createHandleMqttMessage } from './handleMqttMessage';
 import { createMqttClient } from './mqttClient';
 import { createDiscordClient } from './discordClient';
 import { Client } from 'discord.js';
-import { MqttClient } from 'mqtt/*';
+import { MqttClient } from 'mqtt';
 
 // Load environment variables
 dotenv.config({

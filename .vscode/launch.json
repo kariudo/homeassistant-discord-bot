@@ -5,22 +5,32 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "type": "bun",
+            "internalConsoleOptions": "neverOpen",
             "request": "launch",
-            "name": "Launch Program (with FNM)",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "console": "integratedTerminal",
-            "internalConsoleOptions":"neverOpen",
-            "program": "${workspaceFolder}/dist",
-            "runtimeExecutable": "fnm",
-            "runtimeArgs": [
-                "exec",
-                "--",
-                "node"
-            ],
-            "restart": true
+            "name": "Debug File",
+            "program": "${file}",
+            "cwd": "${workspaceFolder}",
+            "stopOnEntry": false,
+            "watchMode": false
+        },
+        {
+            "type": "bun",
+            "internalConsoleOptions": "neverOpen",
+            "request": "launch",
+            "name": "Run File",
+            "program": "${file}",
+            "cwd": "${workspaceFolder}",
+            "noDebug": true,
+            "watchMode": false
+        },
+        {
+            "type": "bun",
+            "internalConsoleOptions": "neverOpen",
+            "request": "attach",
+            "name": "Attach Bun",
+            "url": "ws://localhost:6499/",
+            "stopOnEntry": false
         }
     ]
 }

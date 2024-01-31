@@ -10,9 +10,9 @@
   "main": "server.js",
   "scripts": {
     "clean": "rimraf ./dist",
-    "build": "npm run clean && tsc",
-    "start": "node dist",
-    "dev": "tsx watch src/index.ts"
+    "build": "bun clean && bun run ./build.js",
+    "start": "bun run ./dist/index.js",
+    "dev": "bun run src/index.ts"
   },
   "dependencies": {
     "discord.js": "^14.14.1",
