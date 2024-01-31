@@ -1,8 +1,8 @@
 /**
  * Handles the MQTT disconnection by logging an error message.
  *
- * @return {void} 
+ * @return {void}
  */
 export const handleMqttDisconnect = () => {
-  console.error("MQTT disconnected");
+	console.error("MQTT disconnected");
 };

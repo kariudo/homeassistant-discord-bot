@@ -8,6 +8,16 @@
             "type": "bun",
             "internalConsoleOptions": "neverOpen",
             "request": "launch",
+            "name": "Debug Project",
+            "program": "src/index.ts",
+            "cwd": "${workspaceFolder}",
+            "stopOnEntry": false,
+            "watchMode": false
+        },
+        {
+            "type": "bun",
+            "internalConsoleOptions": "neverOpen",
+            "request": "launch",
             "name": "Debug File",
             "program": "${file}",
             "cwd": "${workspaceFolder}",

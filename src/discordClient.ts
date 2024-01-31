@@ -6,21 +6,21 @@ import { Client, GatewayIntentBits, Options } from "discord.js";
  * @return {Client} The created discord bot client
  */
 export const createDiscordClient = () => {
-  // Configure and create a discord bot client.
-  const options = {
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildPresences,
-      GatewayIntentBits.GuildMembers,
-      GatewayIntentBits.GuildVoiceStates,
-    ],
-    makeCache: Options.cacheWithLimits({
-      ...Options.DefaultMakeCacheSettings,
-      GuildMemberManager: 200,
-    }),
-  };
+	// Configure and create a discord bot client.
+	const options = {
+		intents: [
+			GatewayIntentBits.Guilds,
+			GatewayIntentBits.GuildPresences,
+			GatewayIntentBits.GuildMembers,
+			GatewayIntentBits.GuildVoiceStates,
+		],
+		makeCache: Options.cacheWithLimits({
+			...Options.DefaultMakeCacheSettings,
+			GuildMemberManager: 200,
+		}),
+	};
 
-  const discordClient: Client = new Client(options);
+	const discordClient: Client = new Client(options);
 
-  return discordClient;
+	return discordClient;
 };

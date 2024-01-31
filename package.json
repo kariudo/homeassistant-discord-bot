@@ -9,6 +9,7 @@
   },
   "main": "server.js",
   "scripts": {
+    "lint": "bunx @biomejs/biome check --apply ./src",
     "clean": "rimraf ./dist",
     "build": "bun clean && bun run ./build.js",
     "start": "bun run ./dist/index.js",
