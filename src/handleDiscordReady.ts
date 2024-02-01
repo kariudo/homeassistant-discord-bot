@@ -1,8 +1,6 @@
 import { ActivityType, Client } from "discord.js";
 import { MqttClient } from "mqtt";
-import { getSelf } from "./discordUtility";
-import { printInviteLink } from "./discordUtility";
-import { setBotNickname } from "./discordUtility";
+import { getSelf, printInviteLink, setBotNickname } from "./discordUtility";
 import { createHandleVoiceStatusUpdate } from "./handleVoiceStatusUpdate";
 import { type BotConfig } from "./models/BotConfig";
 
