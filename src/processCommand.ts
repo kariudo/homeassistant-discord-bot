@@ -1,4 +1,5 @@
 import { Client, GuildMember } from "discord.js";
+import type { MqttClient } from "mqtt";
 import { setBotNickname } from "./discordUtility";
 import { setBotActivity } from "./discordUtility";
 import { moveToChannelByName } from "./discordUtility";
@@ -16,6 +17,7 @@ import { type BotConfig } from "./models/BotConfig";
 export async function processCommand(
 	message: string,
 	discordClient: Client,
+	mqttClient: MqttClient,
 	config: BotConfig,
 ): Promise<void> {
 	const you: GuildMember = await getSelf(discordClient, config);
@@ -25,7 +27,7 @@ export async function processCommand(
 		return;
 	}
 	// Get the first word as the command, leave the rest as arguments.
-	const command: string = args.shift()?.toLowerCase();
+	const command: string = args.shift()?.toLowerCase() ?? "MISSING_COMMAND";
 	switch (command) {
 		case "mute":
 			// Confirm the user is connected to a voice channel.
@@ -88,7 +90,7 @@ export async function processCommand(
 		}
 		case "bot_activity": {
 			const botActivity: string = args.join(" ").trim();
-			setBotActivity(discordClient, botActivity);
+			setBotActivity(botActivity, discordClient, mqttClient, config);
 			break;
 		}
 		case "bot_nick": {

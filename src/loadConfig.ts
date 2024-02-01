@@ -9,41 +9,40 @@ import { throwEnvironmentError } from "./throwError";
  * @return {BotConfig} the loaded configuration object
  */
 export function loadConfig(): BotConfig {
+	const botTopic =
+		process.env["TOPIC_BOT"] ?? throwEnvironmentError("TOPIC_BOT");
 	return {
 		bot: {
-			token: process.env['BOT_TOKEN'] ?? throwEnvironmentError("BOT_TOKEN"),
+			token: process.env["BOT_TOKEN"] ?? throwEnvironmentError("BOT_TOKEN"),
 			nickname:
-				process.env['BOT_NICKNAME'] ?? throwEnvironmentError("BOT_NICKNAME"),
-			id: process.env['BOT_ID'] ?? throwEnvironmentError("BOT_ID"),
+				process.env["BOT_NICKNAME"] ?? throwEnvironmentError("BOT_NICKNAME"),
+			id: process.env["BOT_ID"] ?? throwEnvironmentError("BOT_ID"),
 		},
 		mqtt: {
-			url: process.env['MQTT_URL'] ?? throwEnvironmentError("MQTT_URL"),
-			port: process.env['MQTT_PORT'] ?? throwEnvironmentError("MQTT_PORT"),
+			url: process.env["MQTT_URL"] ?? throwEnvironmentError("MQTT_URL"),
+			port: process.env["MQTT_PORT"] ?? throwEnvironmentError("MQTT_PORT"),
 			username:
-				process.env['MQTT_USERNAME'] ?? throwEnvironmentError("MQTT_USERNAME"),
+				process.env["MQTT_USERNAME"] ?? throwEnvironmentError("MQTT_USERNAME"),
 			password:
-				process.env['MQTT_PASSWORD'] ?? throwEnvironmentError("MQTT_PASSWORD"),
+				process.env["MQTT_PASSWORD"] ?? throwEnvironmentError("MQTT_PASSWORD"),
 			clientId:
-				process.env['MQTT_CLIENT_ID'] ?? throwEnvironmentError("MQTT_CLIENT_ID"),
+				process.env["MQTT_CLIENT_ID"] ??
+				throwEnvironmentError("MQTT_CLIENT_ID"),
 			topics: {
-				connected:
-					process.env['TOPIC_CONNECTED'] ??
-					throwEnvironmentError("TOPIC_CONNECTED"),
-				discovery:
-					process.env['TOPIC_DISCOVERY'] ??
-					throwEnvironmentError("TOPIC_DISCOVERY"),
-				online:
-					process.env['TOPIC_ONLINE'] ?? throwEnvironmentError("TOPIC_ONLINE"),
-				command:
-					process.env['TOPIC_COMMAND'] ?? throwEnvironmentError("TOPIC_COMMAND"),
-				voice: process.env['TOPIC_VOICE'] ?? throwEnvironmentError("TOPIC_VOICE"),
+				bot: botTopic,
+				activity: `${botTopic}/activity`,
+				connected: `${botTopic}/connected`,
+				discovery: `${botTopic}/discovery`,
+				online: `${botTopic}/online`,
+				command: `${botTopic}/command`,
+				voice: `${botTopic}/voice`,
 			},
 		},
 		guild: {
-			id: process.env['GUILD_ID'] ?? throwEnvironmentError("GUILD_ID"),
+			id: process.env["GUILD_ID"] ?? throwEnvironmentError("GUILD_ID"),
 		},
 		you: {
-			id: process.env['YOUR_ID'] ?? throwEnvironmentError("YOUR_ID"),
+			id: process.env["YOUR_ID"] ?? throwEnvironmentError("YOUR_ID"),
 		},
 	};
 }

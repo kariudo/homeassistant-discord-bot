@@ -11,11 +11,13 @@ export interface BotConfig {
 		password: string;
 		clientId: string;
 		topics: {
+			bot: string;
 			connected: string;
 			discovery: string;
 			online: string;
 			command: string;
 			voice: string;
+			activity: string;
 		};
 	};
 	guild: {

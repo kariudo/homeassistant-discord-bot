@@ -142,6 +142,20 @@ export async function publishDiscoveryMessages(
 		},
 	});
 
+	// Publish a text component for the bot activity.
+	discoveryComponents.push({
+		topic: `${config.mqtt.topics.discovery}/text/${deviceId}/activity/config`,
+		payload: {
+			name: "Bot Activity",
+			state_topic: config.mqtt.topics.activity,
+			command_topic: config.mqtt.topics.command,
+			command_template: "bot_activity {{ value }}",
+			unique_id: `${deviceId}_activity`,
+			device: device,
+			icon: "mdi:robot",
+		},
+	});
+
 	// Publish all the discovery components.
 	for (const component of discoveryComponents) {
 		mqttClient.publish(component.topic, JSON.stringify(component.payload), {
