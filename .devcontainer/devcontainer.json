@@ -8,7 +8,12 @@
     "vscode": {
       "settings": {},
       "extensions": [
-        "jetpack-io.devbox"
+        "Codeium.codeium",
+        "jetpack-io.devbox",
+        "ms-vscode-remote.remote-ssh",
+        "biomejs.biome",
+        "EditorConfig.EditorConfig",
+        "oven.bun-vscode"
       ]
     }
   },
