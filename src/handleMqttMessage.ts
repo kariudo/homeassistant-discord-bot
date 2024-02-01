@@ -13,25 +13,25 @@ import { publishDiscoveryMessages } from "./publishDiscoveryMessages";
  * @returns {(topic: string, message: Buffer) => void} the MQTT message handler
  */
 export const createHandleMqttMessage = (
-	mqttClient: MqttClient,
-	discordClient: Client,
-	config: BotConfig,
+  mqttClient: MqttClient,
+  discordClient: Client,
+  config: BotConfig,
 ) => {
-	/**
-	 * Handles MQTT messages by processing commands and publishing discovery messages.
-	 *
-	 * @param {string} topic - The topic of the MQTT message
-	 * @param {Buffer} message - The message received from MQTT
-	 * @return {void}
-	 */
-	const handleMqttMessage = (topic: string, message: Buffer): void => {
-		if (topic === config.mqtt.topics.command)
-			processCommand(message.toString(), discordClient, mqttClient, config);
-		if (topic === "homeassistant/status" && message.toString() === "online") {
-			console.debug("Message: Home Assistant MQTT Online...");
-			publishDiscoveryMessages(mqttClient, discordClient, config);
-		}
-	};
+  /**
+   * Handles MQTT messages by processing commands and publishing discovery messages.
+   *
+   * @param {string} topic - The topic of the MQTT message
+   * @param {Buffer} message - The message received from MQTT
+   * @return {void}
+   */
+  const handleMqttMessage = (topic: string, message: Buffer): void => {
+    if (topic === config.mqtt.topics.command)
+      processCommand(message.toString(), discordClient, mqttClient, config);
+    if (topic === "homeassistant/status" && message.toString() === "online") {
+      console.debug("Message: Home Assistant MQTT Online...");
+      publishDiscoveryMessages(mqttClient, discordClient, config);
+    }
+  };
 
-	return handleMqttMessage;
+  return handleMqttMessage;
 };
