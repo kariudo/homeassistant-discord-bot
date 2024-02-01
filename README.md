@@ -118,3 +118,16 @@ You just need to setup the `.env` file with your configuration and provide it:
 ```sh
 docker run -it -v /<path_to_your_dotenv>/.env:/usr/src/app/.env ghcr.io/kariudo/homeassistant-discord-bot:latest
 ```
+
+### Docker Compose Example
+
+```yml
+version: '3'
+name: bots
+services:
+  homeassistant-discord:
+    container_name: homeassistant-discord-bot
+    image: ghcr.io/kariudo/homeassistant-discord-bot:latest
+    volumes:
+      - /share/Container/discord-bot/config/.env:/usr/src/app/.env
+```
