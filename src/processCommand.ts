@@ -1,9 +1,6 @@
 import { Client, GuildMember } from "discord.js";
 import type { MqttClient } from "mqtt";
-import { setBotNickname } from "./discordUtility";
-import { setBotActivity } from "./discordUtility";
-import { moveToChannelByName } from "./discordUtility";
-import { getSelf } from "./discordUtility";
+import { setBotNickname, setBotActivity, moveToChannelByName, getSelf } from "./discordUtility";
 import { type BotConfig } from "./models/BotConfig";
 
 /**
