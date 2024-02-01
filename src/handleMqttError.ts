@@ -7,7 +7,7 @@ import mqtt from "mqtt";
  * @return {void}
  */
 export const handleMqttError = (
-	error: Error | mqtt.ErrorWithReasonCode,
+  error: Error | mqtt.ErrorWithReasonCode,
 ): void => {
-	console.error(`MQTT ${error}`);
+  console.error(`MQTT ${error}`);
 };

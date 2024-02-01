@@ -21,6 +21,7 @@
     "mqtt": "^5.3.5"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
     "@types/dotenv-defaults": "^2.0.4",
     "@types/node": "^20.11.10",
     "events": "^3.3.0",
