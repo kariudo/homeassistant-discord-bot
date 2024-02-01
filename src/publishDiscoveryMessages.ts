@@ -37,7 +37,7 @@ export async function publishDiscoveryMessages(
 			state_topic: config.mqtt.topics.voice,
 			unique_id: `${deviceId}_voice`,
 			json_attributes_topic: config.mqtt.topics.voice,
-			device: device,
+			device,
 			device_class: "connectivity",
 		},
 	});
@@ -50,7 +50,7 @@ export async function publishDiscoveryMessages(
 			state_topic: `${config.mqtt.topics.online}/count`,
 			json_attributes_topic: config.mqtt.topics.online,
 			unique_id: `${deviceId}_users_online`,
-			device: device,
+			device,
 		},
 	});
 
@@ -66,7 +66,7 @@ export async function publishDiscoveryMessages(
 			state_off: "false",
 			value_template: "{{ value_json.mute }}",
 			unique_id: `${deviceId}_mute`,
-			device: device,
+			device,
 			payload_on: "mute",
 			payload_off: "unmute",
 			icon: "mdi:microphone-off",
@@ -90,7 +90,7 @@ export async function publishDiscoveryMessages(
 			state_off: "false",
 			value_template: "{{ value_json.deaf }}",
 			unique_id: `${deviceId}_deaf`,
-			device: device,
+			device,
 			payload_on: "deaf",
 			payload_off: "undeaf",
 			icon: "mdi:headphones-off",
@@ -113,7 +113,7 @@ export async function publishDiscoveryMessages(
 			command_template: "move {{ value }}",
 			value_template: "{{ value_json.channel }}",
 			unique_id: `${deviceId}_channel`,
-			device: device,
+			device,
 			icon: "mdi:account-voice",
 			// Only available when already connected to a voice channel.
 			availability_topic: config.mqtt.topics.voice,
@@ -132,7 +132,7 @@ export async function publishDiscoveryMessages(
 			state_topic: config.mqtt.topics.voice,
 			command_template: "disconnect",
 			unique_id: `${deviceId}_disconnect`,
-			device: device,
+			device,
 			icon: "mdi:account-off",
 			// Only available when already connected to a voice channel.
 			availability_topic: config.mqtt.topics.voice,
@@ -151,7 +151,7 @@ export async function publishDiscoveryMessages(
 			command_topic: config.mqtt.topics.command,
 			command_template: "bot_activity {{ value }}",
 			unique_id: `${deviceId}_activity`,
-			device: device,
+			device,
 			icon: "mdi:robot",
 		},
 	});
