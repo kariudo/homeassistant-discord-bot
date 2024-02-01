@@ -9,7 +9,7 @@ import type { BotConfig } from "./models/BotConfig";
  */
 export const createMqttClient = (config: BotConfig) => {
   const options: IClientOptions = {
-    port: Number(config.mqtt.port) || 1883,
+    port: Number(config.mqtt.port) ?? 1883,
     host: config.mqtt.url,
     clientId: `discord_bot_${config.mqtt.clientId}`,
     username: config.mqtt.username,
