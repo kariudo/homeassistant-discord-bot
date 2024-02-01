@@ -66,16 +66,10 @@ the required permissions.
 3. *[Optional]* Customize your MQTT topics in the `.env` file:
 
    ```conf
-   # Home Asssistant discovery topic
+   # Home Asssistant base discovery topic
    TOPIC_DISCOVERY=homeassistant
-   # Bot connected status topic
-   TOPIC_CONNECTED=discordbot/connected
-   # Online guild memebers topic
-   TOPIC_ONLINE=discordbot/online
-   # Command topic
-   TOPIC_COMMAND=discordbot/command
-   # User connection status topic
-   TOPIC_VOICE=discordbot/voice
+   # Bot base topic
+   TOPIC_BOT=discordbot
    ```
 
 ### Configure the ID Values
