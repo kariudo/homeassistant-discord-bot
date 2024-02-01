@@ -18,6 +18,11 @@ export const createHandleDiscordReady = (
   mqttClient: MqttClient,
   config: BotConfig,
 ): (() => Promise<void>) => {
+  /**
+   * A function that handles the initialization of the bot client and sets up various configurations and activities.
+   *
+   * @return {Promise<void>} A promise that resolves when the initialization is complete.
+   */
   const handler = async (): Promise<void> => {
     if (!discordClient.user) {
       throw new Error("User is null - bot client is not properly initialized.");
