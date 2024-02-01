@@ -1,4 +1,4 @@
 export interface Device {
-	identifiers: string[];
-	name: string;
+  identifiers: string[];
+  name: string;
 }

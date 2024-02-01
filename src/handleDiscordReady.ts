@@ -14,36 +14,36 @@ import { type BotConfig } from "./models/BotConfig";
  * @return {() => Promise<void>} a function that returns a promise of void
  */
 export const createHandleDiscordReady = (
-	discordClient: Client,
-	mqttClient: MqttClient,
-	config: BotConfig,
+  discordClient: Client,
+  mqttClient: MqttClient,
+  config: BotConfig,
 ): (() => Promise<void>) => {
-	const handler = async (): Promise<void> => {
-		if (!discordClient.user) {
-			throw new Error("User is null - bot client is not properly initialized.");
-		}
+  const handler = async (): Promise<void> => {
+    if (!discordClient.user) {
+      throw new Error("User is null - bot client is not properly initialized.");
+    }
 
-		// Generate an invite link and print to the console. (Must be logged in with the bot token)
-		printInviteLink(discordClient);
+    // Generate an invite link and print to the console. (Must be logged in with the bot token)
+    printInviteLink(discordClient);
 
-		console.info(`Discord: Logged in as "${discordClient.user.username}".`);
-		const initialActivity = "🏠 Watching the house";
-		discordClient.user.setPresence({
-			activities: [
-				{
-					name: initialActivity,
-					type: ActivityType.Custom,
-				},
-			],
-			status: "online",
-		});
-		mqttClient.publish(config.mqtt.topics.activity, initialActivity);
-		// If permissions allow, set the nickname to the custom one.
-		setBotNickname(config.bot.nickname, discordClient, config);
-		// Set initial state of the user.
-		const self = await getSelf(discordClient, config);
-		createHandleVoiceStatusUpdate(mqttClient, config)(undefined, self.voice);
-	};
+    console.info(`Discord: Logged in as "${discordClient.user.username}".`);
+    const initialActivity = "🏠 Watching the house";
+    discordClient.user.setPresence({
+      activities: [
+        {
+          name: initialActivity,
+          type: ActivityType.Custom,
+        },
+      ],
+      status: "online",
+    });
+    mqttClient.publish(config.mqtt.topics.activity, initialActivity);
+    // If permissions allow, set the nickname to the custom one.
+    setBotNickname(config.bot.nickname, discordClient, config);
+    // Set initial state of the user.
+    const self = await getSelf(discordClient, config);
+    createHandleVoiceStatusUpdate(mqttClient, config)(undefined, self.voice);
+  };
 
-	return handler;
+  return handler;
 };

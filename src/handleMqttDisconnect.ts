@@ -4,5 +4,5 @@
  * @return {void}
  */
 export const handleMqttDisconnect = () => {
-	console.error("MQTT disconnected");
+  console.error("MQTT disconnected");
 };

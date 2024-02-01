@@ -5,5 +5,5 @@
  * @return {never}
  */
 export function throwEnvironmentError(envVarName: string): never {
-	throw new Error(`Environment variable ${envVarName} is required.`);
+  throw new Error(`Environment variable ${envVarName} is required.`);
 }
