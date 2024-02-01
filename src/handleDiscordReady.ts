@@ -27,15 +27,17 @@ export const createHandleDiscordReady = (
 		printInviteLink(discordClient);
 
 		console.info(`Discord: Logged in as "${discordClient.user.username}".`);
+		const initialActivity = "🏠 Watching the house";
 		discordClient.user.setPresence({
 			activities: [
 				{
-					name: "🏠 Watching the house",
+					name: initialActivity,
 					type: ActivityType.Custom,
 				},
 			],
 			status: "online",
 		});
+		mqttClient.publish(config.mqtt.topics.activity, initialActivity);
 		// If permissions allow, set the nickname to the custom one.
 		setBotNickname(config.bot.nickname, discordClient, config);
 		// Set initial state of the user.

@@ -1,5 +1,7 @@
 import { MqttClient } from "mqtt";
 import { type BotConfig } from "./models/BotConfig";
+import { publishDiscoveryMessages } from './publishDiscoveryMessages';
+import type { Client } from 'discord.js';
 
 /**
  * Handles MQTT connection and subscribes to necessary topics. Publishes connected message and discovery messages.
@@ -9,6 +11,7 @@ import { type BotConfig } from "./models/BotConfig";
  */
 export const CreateHandleMqttReady = (
 	mqttClient: MqttClient,
+	discordClient: Client,
 	config: BotConfig,
 ) => {
 	/**
@@ -25,6 +28,8 @@ export const CreateHandleMqttReady = (
 			qos: 1,
 			retain: true,
 		});
+		// Publish discovery messages.
+		publishDiscoveryMessages(mqttClient, discordClient, config)
 	};
 
 	return handleMqttConnect;

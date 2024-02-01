@@ -20,7 +20,7 @@ export function loadConfig(): BotConfig {
 		},
 		mqtt: {
 			url: process.env["MQTT_URL"] ?? throwEnvironmentError("MQTT_URL"),
-			port: process.env["MQTT_PORT"] ?? throwEnvironmentError("MQTT_PORT"),
+			port: process.env["MQTT_PORT"] ?? '1883',
 			username:
 				process.env["MQTT_USERNAME"] ?? throwEnvironmentError("MQTT_USERNAME"),
 			password:
@@ -29,10 +29,10 @@ export function loadConfig(): BotConfig {
 				process.env["MQTT_CLIENT_ID"] ??
 				throwEnvironmentError("MQTT_CLIENT_ID"),
 			topics: {
+				discovery: process.env['TOPIC_DISCOVERY'] ?? 'homeassistant',
 				bot: botTopic,
 				activity: `${botTopic}/activity`,
 				connected: `${botTopic}/connected`,
-				discovery: `${botTopic}/discovery`,
 				online: `${botTopic}/online`,
 				command: `${botTopic}/command`,
 				voice: `${botTopic}/voice`,

@@ -51,7 +51,7 @@ const discordClient: Client = createDiscordClient();
 const mqttClient: MqttClient = createMqttClient(config);
 
 // Bind handlers to listeners.
-mqttClient.on("connect", CreateHandleMqttReady(mqttClient, config));
+mqttClient.on("connect", CreateHandleMqttReady(mqttClient, discordClient, config));
 mqttClient.on("error", handleMqttError);
 mqttClient.on("close", handleMqttDisconnect);
 mqttClient.on(
