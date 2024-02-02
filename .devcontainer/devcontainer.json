@@ -13,9 +13,11 @@
         "ms-vscode-remote.remote-ssh",
         "biomejs.biome",
         "EditorConfig.EditorConfig",
-        "oven.bun-vscode"
+        "oven.bun-vscode",
+        "eamodio.gitlens"
       ]
     }
   },
-  "remoteUser": "devbox"
+  "remoteUser": "devbox",
+  "postStartCommand": "bun i"
 }
