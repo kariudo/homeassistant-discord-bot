@@ -2,6 +2,7 @@
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-blu.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![DeepSource](https://app.deepsource.com/gh/kariudo/homeassistant-discord-bot.svg/?label=active+issues&show_trend=true&token=_ISb1nHupJLePNogI9qQTmOB)](https://app.deepsource.com/gh/kariudo/homeassistant-discord-bot/)
+[![CodeQL](https://github.com/kariudo/homeassistant-discord-bot/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/kariudo/homeassistant-discord-bot/actions/workflows/github-code-scanning/codeql)
 [![Buymeacoffee](https://badgen.net/badge/icon/buymeacoffee?icon=buymeacoffee&label)](<[https://https://www.buymeacoffee.com/](https://www.buymeacoffee.com/kariudo)>)
 [![Built with Devbox](https://jetpack.io/img/devbox/shield_galaxy.svg)](https://jetpack.io/devbox/docs/contributor-quickstart/)
 
