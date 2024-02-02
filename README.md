@@ -14,7 +14,7 @@
 
 # Home Assistant Discord Bot
 
-The Home Assistant Discord Bot offers a pile of features designed to enhance your Discord experience by leveraging Home Assistant's capabilities via MQTT for lightweight communication and automatic setup of deviec and entities.
+The Home Assistant Discord Bot offers a pile of features designed to enhance your Discord experience by leveraging Home Assistant's capabilities via MQTT for lightweight communication and automatic setup of devices and entities.
 
 Some major functionalities include monitoring voice channel connections, tracking online presence and activities of friends, and executing commands for user and bot control. These commands enable users to mute or unmute themselves, deafen or undeafen, update the bot's activity status, and move your user between voice channels or just disconnect.
 
