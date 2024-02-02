@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "bunx @biomejs/biome check --apply ./src",
     "clean": "rimraf ./dist",
-    "build": "bun clean && bun run ./build.js",
+    "build": "bun clean && bun build ./src/index.ts --outdir ./dist --target bun",
     "start": "bun run ./dist/index.js",
     "dev": "bun run src/index.ts"
   },
