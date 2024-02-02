@@ -1,4 +1,4 @@
-# Home Assistant Discord Bot
+![Home Assistant Discord Bot](header.png)
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-blu.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![DeepSource](https://app.deepsource.com/gh/kariudo/homeassistant-discord-bot.svg/?label=active+issues&show_trend=true&token=_ISb1nHupJLePNogI9qQTmOB)](https://app.deepsource.com/gh/kariudo/homeassistant-discord-bot/)
@@ -11,6 +11,8 @@
 ![Home Assistant](https://img.shields.io/badge/home%20assistant-%2341BDF5.svg?style=for-the-badge&logo=home-assistant&logoColor=white)
 ![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+
+# Home Assistant Discord Bot
 
 The Home Assistant Discord Bot offers a pile of features designed to enhance your Discord experience by leveraging Home Assistant's capabilities via MQTT for lightweight communication and automatic setup of deviec and entities.
 
