@@ -52,6 +52,8 @@ Provides the following devices/enties:
     - *Users connected* (Count, with member activities online attribute)
   - **Text**:
     - *Bot acitivity status*
+  - **Select**
+    - *Voice channel*
 
 
 ## Screenshots
