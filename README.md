@@ -11,7 +11,9 @@
 ![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-The Home Assistant Discord Bot offers a pile of features designed to enhance your Discord experience by leveraging Home Assistant's capabilities. Some major functionalities include monitoring voice channel connections, tracking online presence and activities of friends, and executing commands for user and bot control. These commands enable users to mute or unmute themselves, deafen or undeafen, update the bot's activity status, and move your user between voice channels or just disconnect.
+The Home Assistant Discord Bot offers a pile of features designed to enhance your Discord experience by leveraging Home Assistant's capabilities via MQTT for lightweight communication and automatic setup of deviec and entities.
+
+Some major functionalities include monitoring voice channel connections, tracking online presence and activities of friends, and executing commands for user and bot control. These commands enable users to mute or unmute themselves, deafen or undeafen, update the bot's activity status, and move your user between voice channels or just disconnect.
 
 Leverage the above control with Home Assistant automations as well to give yourself clever control
 over your audio status or channel location. My favorite use so far is moving myself to
@@ -34,6 +36,24 @@ as moving me back or umuting me so I don't sit there talking to myself... as oft
 - `bot_activity {activity}`: Sets the bot's current activity status.
 - `disconnect`: Disconnects the bot from the voice channel.
 
+## Home Assistant Components
+
+Provides the following devices/enties:
+
+- *Discord* device (see screenshot below)
+  - **Switches**:
+    - *Mute*
+    - *Deafen*
+  - **Buttons**:
+    - *Disconnect*
+  - **Binary Sensors**:
+    - *Voice connection*
+  - **Sensors**:
+    - *Users connected* (Count, with member activities online attribute)
+  - **Text**:
+    - *Bot acitivity status*
+
+
 ## Screenshots
 
 ### Device
@@ -46,7 +66,34 @@ Exposed sensors and controls are grouped together as a single `Discord` device.
 
 Easily add access to your voice channel controls to Home Assistant, and leverage them for automations.
 
-![HomeAssistant Dashboard Card](screenshot_homeassistant_card.png)
+**Conditional Card Example:**
+
+![Conditinoal Home Assistant Card Example](screenshot_conditional_card.png)
+
+**Conditional Card Example (YAML):**
+
+```yml
+type: conditional
+conditions:
+  - condition: state
+    entity: binary_sensor.discord_user_voice_connection
+    state: 'on'
+card:
+  title: Discord
+  show_header_toggle: false
+  state_color: true
+  type: entities
+  entities:
+    - entity: switch.discord_user_deafen
+      name: Deafen
+    - entity: switch.discord_user_mute
+      name: Mute
+    - entity: select.discord_user_channel_selector
+      name: Channel Selector
+    - entity: text.discord_bot_activity
+    - entity: button.discord_user_disconnect
+      name: Disconnect
+```
 
 ### Customizable Bot Name
 
@@ -89,13 +136,13 @@ the required permissions.
 
 > Note: you will need to enable developer mode in your discord app settings to see the ID copy features in the context menus.
 
-1. After you or an admin added your bot to a server you can right-click on the server name to copy the `<GUILD_ID>`.
-2. `<YOUR_ID>` can be found by right-clicking on your name in the users tab of the server.
-2. `<BOT_ID>` can be found by right-clicking on the bot's name in the users tab of the server, it will need to be added to the server first for this..
+1. After you or an admin added your bot to a server you can right-click on the server name to copy the `GUILD_ID`.
+2. `YOUR_ID` can be found by right-clicking on your name in the users tab of the server.
+2. `BOT_ID` can be found by right-clicking on the bot's name in the users tab of the server, it will need to be added to the server first for this..
 
 ## Home Assistant Usage
 
-MQTT discovery should present a device in home assistant for you to configure with all the available sensors, selects, switches.
+MQTT discovery should present a device in home assistant for you to configure with all the available sensors, selects, switches. See the full list above, and screenshot examples.
 
 ### Direct Command Service
 
