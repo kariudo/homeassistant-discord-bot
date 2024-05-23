@@ -38,6 +38,7 @@ export const createHandlePresenceUpdate = (
       const userPresence: UserPresence = {
         username: presence.member.user.username,
         activity: presence.activities,
+        voiceChannel: presence.member.voice?.channel?.name ?? null,
       };
       online.push(userPresence);
     }
