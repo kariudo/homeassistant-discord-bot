@@ -1,6 +1,6 @@
 {
   "name": "homeassistant-discord-bot",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Home Assistant Discord.js Integration on Docker",
   "author": "kariudo",
   "repository": {
