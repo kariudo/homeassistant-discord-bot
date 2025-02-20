@@ -52,7 +52,9 @@ Provides the following devices/enties:
   - **Binary Sensors**:
     - *Voice connection*
   - **Sensors**:
-    - *Users connected* (Count, with member activities online attribute)
+    - *Users connected* (Count state, with member activities online attribute, voice channel presence)
+      - Count (_state_)
+      - onlne (_attribute_): includes user list with their active voice channel (with extra details on your user and the bot)
   - **Text**:
     - *Bot acitivity status*
   - **Select**
