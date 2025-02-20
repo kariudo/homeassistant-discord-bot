@@ -119,15 +119,33 @@ name this whatever you want. The bot display name can be configured seperately v
 1. You can use the generated invite link that is printed to the console at startup to add the bot to the serer with
 the required permissions.
 
-### MQTT
+### ENV variables
+
+Most of the configuration is preflighted by your environment variables, the easiest setup is using a `.env` in the
+project (a template file is provided in the root). Replace the appropriate values with yours:
+
+```sh
+# Copy to .env and replace <PLACEHOLDER> values with your ID and Token values etc.
+BOT_TOKEN=<YOUR_BOT_TOKEN>
+MQTT_URL=mqtt://192.168.1.110
+MQTT_PORT=1883
+MQTT_USERNAME=mqttbotuser
+MQTT_PASSWORD=<YOUR_MQTT_PASSWORD>
+TOPIC_DISCOVERY=homeassistant
+TOPIC_BOT=discordbot
+GUILD_ID=<YOUR_GUILD_ID>
+YOUR_ID=<YOUR_ID>
+BOT_ID=<YOUR_BOT_ID>
+MQTT_CLIENT_ID=discordbot_bow_1
+BOT_ACTIVITY="🏠Watching the house"
+BOT_NICKNAME=Caduceus
+```
 
 ### MQTT Connection Setup
 
 
 1. Ensure that you have a configured `MQTT` broker and integration in Home Assitant.
-2. Specify the MQTT broker URL and credentials in the `.env` file:
-   - `MQTT_BROKER_URL` should be set to your MQTT broker's URL.
-   - `MQTT_BROKER_USERNAME` and `MQTT_BROKER_PASSWORD` should be set with your login credentials.
+2. Specify the MQTT broker URL and credentials in the `.env` file.
 3. *[Optional]* Customize your MQTT topics in the `.env` file:
 
    ```conf
