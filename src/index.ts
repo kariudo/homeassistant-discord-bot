@@ -60,7 +60,7 @@ discordClient.on(
 );
 discordClient.on(
   "voiceStateUpdate",
-  createHandleVoiceStatusUpdate(mqttClient, config),
+  createHandleVoiceStatusUpdate(discordClient, mqttClient, config),
 );
 discordClient.on(
   "presenceUpdate",

@@ -17,6 +17,7 @@ export function loadConfig(): BotConfig {
         token: process.env["BOT_TOKEN"] ?? throwEnvironmentError("BOT_TOKEN"),
         nickname:
           process.env["BOT_NICKNAME"] ?? throwEnvironmentError("BOT_NICKNAME"),
+        activity: process.env["BOT_ACTIVITY"] ?? "🏠 Watching the house",
         id: process.env["BOT_ID"] ?? throwEnvironmentError("BOT_ID"),
       },
       mqtt: {
@@ -39,6 +40,7 @@ export function loadConfig(): BotConfig {
           online: `${botTopic}/online`,
           command: `${botTopic}/command`,
           voice: `${botTopic}/voice`,
+          channels: `${botTopic}/channels`,
         },
       },
       guild: {

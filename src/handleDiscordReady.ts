@@ -30,7 +30,7 @@ export const createHandleDiscordReady = (
     printInviteLink(discordClient);
 
     console.info(`Discord: Logged in as "${discordClient.user.username}".`);
-    const initialActivity = "🏠 Watching the house";
+    const initialActivity = config.bot.activity;
     discordClient.user.setPresence({
       activities: [
         {
@@ -45,7 +45,7 @@ export const createHandleDiscordReady = (
     setBotNickname(config.bot.nickname, discordClient, config);
     // Set initial state of the user.
     const self = await getSelf(discordClient, config);
-    createHandleVoiceStatusUpdate(mqttClient, config)(undefined, self.voice);
+    await createHandleVoiceStatusUpdate(discordClient, mqttClient, config)(undefined, self.voice);
   };
 
   return handler;

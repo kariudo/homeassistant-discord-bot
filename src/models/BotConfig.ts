@@ -2,6 +2,7 @@ export interface BotConfig {
   bot: {
     token: string;
     nickname: string;
+    activity: string;
     id: string;
   };
   mqtt: {
@@ -18,6 +19,7 @@ export interface BotConfig {
       command: string;
       voice: string;
       activity: string;
+      channels: string;
     };
   };
   guild: {
