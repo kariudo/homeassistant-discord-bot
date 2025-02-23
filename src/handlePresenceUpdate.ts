@@ -46,7 +46,7 @@ export const createHandlePresenceUpdate = (
     // Publish the online list to the MQTT topic.
     mqttClient.publish(
       config.mqtt.topics.online,
-      JSON.stringify({ online: online }),
+      JSON.stringify({online}),
     );
     // Also publish a count of the users online.
     mqttClient.publish(

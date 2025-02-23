@@ -1,6 +1,5 @@
-import {ChannelType, type GuildMember, VoiceState} from "discord.js";
+import {ChannelType,type Channel, type GuildMember, VoiceState} from "discord.js";
 import {Client} from "discord.js";
-import type {Channel,} from "discord.js";
 import {MqttClient} from "mqtt";
 import type {BotConfig} from "./models/BotConfig";
 import {getGuild} from "./discordUtility";
@@ -30,7 +29,7 @@ export const createHandleVoiceStatusUpdate = (
   ) => {
     const memberId = oldState?.member?.id ?? newState.member?.id;
     if (!memberId) return;
-    if (memberId == config.you.id) {
+    if (memberId === config.you.id) {
       const voiceUpdateInfo = {
         // Binary Sensor in Home Assistant like "ON" or "OFF".
         voice_connection: newState.channelId !== null ? "ON" : "OFF",
@@ -65,7 +64,7 @@ export const createHandleVoiceStatusUpdate = (
     const channels = guild.channels.cache.filter(
       (channel: Channel) => channel.type === ChannelType.GuildVoice,
     );
-    let channelUsers: Record<string, string[]> = {};
+    const channelUsers: Record<string, string[]> = {};
     channels.forEach((channel: Channel) => {
       channelUsers[channel.id] = [];
     });
@@ -76,7 +75,7 @@ export const createHandleVoiceStatusUpdate = (
         channelUsers[voiceChannel?.id].push(member.user.username);
       }
     });
-    const channelUserString = JSON.stringify(channelUsers);
+    const channelUserString = JSON.stringify({channels:channelUsers});
     mqttClient.publish(config.mqtt.topics.channels, channelUserString);
     // sum of all users in voice channels
     const userCount = Object.values(channelUsers).reduce(
