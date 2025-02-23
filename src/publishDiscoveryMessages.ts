@@ -54,6 +54,18 @@ export async function publishDiscoveryMessages(
     },
   });
 
+  // Users in Voice sensor.
+  discoveryComponents.push({
+    topic: `${config.mqtt.topics.discovery}/sensor/${deviceId}/users_voice/config`,
+    payload: {
+      name: "Discord Voice Channel Users",
+      state_topic: `${config.mqtt.topics.channels}/count`,
+      json_attributes_topic: config.mqtt.topics.channels,
+      unique_id: `${deviceId}_users_voice`,
+      device,
+    },
+  });
+
   // Mute switch.
   discoveryComponents.push({
     topic: `${config.mqtt.topics.discovery}/switch/${deviceId}/mute/config`,
