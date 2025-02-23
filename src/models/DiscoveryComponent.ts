@@ -26,4 +26,6 @@ export interface DiscoveryComponentConfig {
   payload_available?: string;
   payload_not_available?: string;
   device_class?: string;
+  state_class?: string;
+  unit_of_measurement?: string;
 }

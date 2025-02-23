@@ -48,6 +48,8 @@ export async function publishDiscoveryMessages(
     payload: {
       name: "Discord Guild Users Online",
       state_topic: `${config.mqtt.topics.online}/count`,
+      state_class: "measurement",
+      unit_of_measurement: "user",
       json_attributes_topic: config.mqtt.topics.online,
       unique_id: `${deviceId}_users_online`,
       device,
@@ -60,6 +62,8 @@ export async function publishDiscoveryMessages(
     payload: {
       name: "Discord Voice Channel Users",
       state_topic: `${config.mqtt.topics.channels}/count`,
+      state_class: "measurement",
+      unit_of_measurement: "user",
       json_attributes_topic: config.mqtt.topics.channels,
       unique_id: `${deviceId}_users_voice`,
       device,
