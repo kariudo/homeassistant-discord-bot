@@ -45,7 +45,11 @@ export const createHandleDiscordReady = (
     setBotNickname(config.bot.nickname, discordClient, config);
     // Set initial state of the user.
     const self = await getSelf(discordClient, config);
-    await createHandleVoiceStatusUpdate(discordClient, mqttClient, config)(undefined, self.voice);
+    await createHandleVoiceStatusUpdate(
+      discordClient,
+      mqttClient,
+      config,
+    )(undefined, self.voice);
   };
 
   return handler;
