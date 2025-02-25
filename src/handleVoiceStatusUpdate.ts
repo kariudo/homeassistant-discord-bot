@@ -39,7 +39,6 @@ export const createHandleVoiceStatusUpdate = (
     // Handle changes to your users voice channel change.
     if (memberId === config.you.id) {
       updateSelf(newState, mqttClient, config);
-      return;
     }
     // Handle changes to other users voice channel changes.
     // This is probably overkill since it will update membership of all the
