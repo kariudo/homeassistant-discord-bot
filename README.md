@@ -55,6 +55,7 @@ Provides the following devices/enties:
     - *Users connected* (Count state, with member activities online attribute, voice channel presence)
       - Count (_state_)
       - onlne (_attribute_): includes user list with their active voice channel (with extra details on your user and the bot)
+    - *Voice channels* (Count state for active members, channel membership exposed by name in attributes)
   - **Text**:
     - *Bot acitivity status*
   - **Select**
