@@ -70,8 +70,8 @@ async function updateAllOtherMembers(
   const channelUsers: Record<string, string[]> = {};
   // Initialize a list of users for each voice channel.
   // biome-ignore lint/complexity/noForEach: `Collection` is not iterable
-  channels.forEach((channel: Channel) => {
-    channelUsers[channel.id] = [];
+  channels.forEach((channel: VoiceBasedChannel) => {
+    channelUsers[channel.name] = [];
   });
   // Check each member to see if they are in a voice channel.
   // biome-ignore lint/complexity/noForEach: `Collection` is not iterable
@@ -79,7 +79,7 @@ async function updateAllOtherMembers(
     const voiceChannel = member.voice.channel;
     if (voiceChannel) {
       // Add to appropriate channel.
-      channelUsers[voiceChannel.id].push(member.user.username);
+      channelUsers[voiceChannel.name].push(member.user.username);
     }
   });
   // Push the list of voice channel users.
