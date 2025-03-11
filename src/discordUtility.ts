@@ -1,15 +1,15 @@
 import {
   ActivityType,
   ChannelType,
-  Client,
-  Collection,
-  Guild,
+  type Client,
+  type Collection,
+  type Guild,
   type GuildBasedChannel,
-  GuildMember,
+  type GuildMember,
   type GuildVoiceChannelResolvable,
   OAuth2Scopes,
   PermissionFlagsBits,
-  VoiceChannel,
+  type VoiceChannel,
 } from "discord.js";
 import type { MqttClient } from "mqtt";
 import type { BotConfig } from "./models/BotConfig";

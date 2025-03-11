@@ -1,5 +1,5 @@
-import { Client } from "discord.js";
-import { MqttClient } from "mqtt";
+import type { Client } from "discord.js";
+import type { MqttClient } from "mqtt";
 import type { BotConfig } from "./models/BotConfig";
 import { processCommand } from "./processCommand";
 import { publishDiscoveryMessages } from "./publishDiscoveryMessages";

@@ -1,4 +1,4 @@
-import { Client, GuildMember } from "discord.js";
+import type { Client, GuildMember } from "discord.js";
 import type { MqttClient } from "mqtt";
 import {
   getSelf,
@@ -6,7 +6,7 @@ import {
   setBotActivity,
   setBotNickname,
 } from "./discordUtility";
-import { type BotConfig } from "./models/BotConfig";
+import type { BotConfig } from "./models/BotConfig";
 
 /**
  * Process a command message and execute corresponding actions.

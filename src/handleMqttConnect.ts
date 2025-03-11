@@ -1,7 +1,9 @@
 import type { Client } from "discord.js";
-import { MqttClient } from "mqtt";
-import { type BotConfig } from "./models/BotConfig";
+import type { MqttClient } from "mqtt";
+import { updateAllOtherMembers } from "./handleVoiceStatusUpdate";
+import type { BotConfig } from "./models/BotConfig";
 import { publishDiscoveryMessages } from "./publishDiscoveryMessages";
+import { createHandlePresenceUpdate } from "./handlePresenceUpdate";
 
 /**
  * Handles MQTT connection and subscribes to necessary topics. Publishes connected message and discovery messages.
@@ -30,6 +32,9 @@ export const CreateHandleMqttReady = (
     });
     // Publish discovery messages.
     publishDiscoveryMessages(mqttClient, discordClient, config);
+    // Initialize sensor states.
+    createHandlePresenceUpdate(discordClient, mqttClient, config)();
+    updateAllOtherMembers(discordClient, config, mqttClient);
   };
 
   return handleMqttConnect;

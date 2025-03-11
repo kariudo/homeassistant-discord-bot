@@ -2,8 +2,8 @@
 
 import dotenv from "dotenv-defaults";
 
-import { Client } from "discord.js";
-import { MqttClient } from "mqtt";
+import type { Client } from "discord.js";
+import type { MqttClient } from "mqtt";
 import { createDiscordClient } from "./discordClient";
 import { createHandleDiscordReady } from "./handleDiscordReady";
 import { CreateHandleMqttReady } from "./handleMqttConnect";

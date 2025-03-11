@@ -1,5 +1,5 @@
-import { Client, Presence } from "discord.js";
-import { MqttClient } from "mqtt";
+import type { Client, Presence } from "discord.js";
+import type { MqttClient } from "mqtt";
 import { getGuild } from "./discordUtility";
 import type { BotConfig } from "./models/BotConfig";
 import type { UserPresence } from "./models/UserPresence";

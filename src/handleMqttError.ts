@@ -1,4 +1,4 @@
-import mqtt from "mqtt";
+import type mqtt from "mqtt";
 
 /**
  * Handles MQTT errors by logging the error to the console.

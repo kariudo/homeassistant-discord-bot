@@ -1,4 +1,4 @@
-import { type BotConfig } from "./models/BotConfig";
+import type { BotConfig } from "./models/BotConfig";
 import { throwEnvironmentError } from "./throwError";
 
 /**

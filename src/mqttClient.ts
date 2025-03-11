@@ -1,4 +1,4 @@
-import { type IClientOptions, MqttClient, connect } from "mqtt";
+import { type IClientOptions, type MqttClient, connect } from "mqtt";
 import type { BotConfig } from "./models/BotConfig";
 
 /**

@@ -1,13 +1,13 @@
 import {
   type Channel,
   ChannelType,
-  Collection,
+  type Collection,
   type GuildMember,
   type VoiceBasedChannel,
-  VoiceState,
+  type VoiceState,
 } from "discord.js";
-import { Client } from "discord.js";
-import { MqttClient } from "mqtt";
+import type { Client } from "discord.js";
+import type { MqttClient } from "mqtt";
 import { getGuild } from "./discordUtility";
 import type { BotConfig } from "./models/BotConfig";
 
@@ -58,7 +58,7 @@ export const createHandleVoiceStatusUpdate = (
  *
  * @returns {Promise<void>} a promise that resolves when the MQTT publish is complete
  */
-async function updateAllOtherMembers(
+export async function updateAllOtherMembers(
   discordClient: Client<boolean>,
   config: BotConfig,
   mqttClient: MqttClient,

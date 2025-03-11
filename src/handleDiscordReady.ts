@@ -1,8 +1,8 @@
-import { ActivityType, Client } from "discord.js";
-import { MqttClient } from "mqtt";
+import { ActivityType, type Client } from "discord.js";
+import type { MqttClient } from "mqtt";
 import { getSelf, printInviteLink, setBotNickname } from "./discordUtility";
 import { createHandleVoiceStatusUpdate } from "./handleVoiceStatusUpdate";
-import { type BotConfig } from "./models/BotConfig";
+import type { BotConfig } from "./models/BotConfig";
 
 /**
  * Creates a handle for when the Discord client is ready.
